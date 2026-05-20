@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>Winfree Oscillatory Neural Network</title>
+    <meta name="description" content="Winfree Oscillatory Neural Network: a dynamical neural architecture based on generalized Winfree synchronization dynamics.">
+    <meta name="keywords" content="Winfree Model, oscillatory neural network, synchronization, machine learning, computer vision, reasoning">
+    <meta name="author" content="Jiawen Dai, Yue Song">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    
+    <!-- Clarity Template CSS -->
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/foundation.min.css">
+    <link href="assets/fontawesome-free-7.2.0-web/css/all.min.css" rel="stylesheet">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Navbar Script -->
+    <script src="assets/scripts/navbar.js"></script> 
+    
+    <!-- MathJax Configuration -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            "HTML-CSS": {
+                scale: 95,
+                availableFonts: ["TeX"],
+                preferredFont: "TeX",
+                webFont: "TeX",
+                imageFont: null,
+                undefinedFamily: "'STIXGeneral', 'Times New Roman', serif"
+            },
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+            }
+        });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        /* ============================================================
+           WONN Project Page Style
+           Unified naming:
+           hero-*    : top project overview
+           content-* : all normal body sections after hero
+           context-* : equation / comparison context block only
+           ============================================================ */
+
+        :root {
+            /* Colors */
+            --body-text: #333333;
+            --muted-text: #555555;
+            --light-text: #666666;
+            --line: #dddddd;
+            --soft-bg: #f7f7f7;
+            --link: #333333;
+            --link-hover: #000000;
+
+            /* Fonts */
+            --font-main: 'Poppins', sans-serif;
+            --font-code: 'Fira Code', monospace;
+
+            /* Widths */
+            --content-width: 980px;
+            --text-width: 850px;
+
+            /* Hero font sizes */
+            --fs-hero-title: 2.20rem;
+            --fs-hero-authors: 1.20rem;
+            --fs-hero-affiliations: 1.00rem;
+            --fs-hero-description: 0.90rem;
+            --fs-hero-takeaways: 0.85rem;
+            --fs-hero-button: 0.92rem;
+            --fs-hero-venue: 1.25rem;
+
+            /* Body font sizes */
+            --fs-content-title: 1.80rem;
+            --fs-content-subtitle: 1.05rem;
+            --fs-body: 0.90rem;
+            --fs-caption: 0.92rem;
+            --fs-table: 0.90rem;
+
+            /* Context block font sizes */
+            --fs-context-label: 0.98rem;
+            --fs-context-math: 0.85rem;
+            --fs-context-note: 0.90rem;
+        }
+
+        /* ============================================================
+           Base typography
+           ============================================================ */
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: #ffffff;
+            color: var(--body-text);
+            font-family: var(--font-main) !important;
+            font-size: var(--fs-body);
+            line-height: 1.70;
+        }
+
+        /* Force Clarity template remnants into one font. */
+        body,
+        body *:not(pre):not(code):not(pre *):not(code *):not(.MathJax):not(.MathJax *):not(.MathJax_Display):not(.MathJax_Display *) {
+            font-family: var(--font-main) !important;
+        }
+
+        .fa,
+        .fa-solid,
+        .fa-regular,
+        .fa-brands,
+        .fas,
+        .far,
+        .fab {
+            font-family: "Font Awesome 7 Free" !important;
+            font-weight: 900 !important;
+        }
+
+        pre,
+        code,
+        pre *,
+        code * {
+            font-family: var(--font-code) !important;
+        }
+
+        .MathJax,
+        .MathJax_Display {
+            font-family: "MathJax_Main", "Latin Modern Math", "STIX Two Math", "Times New Roman", serif;
+        }
+
+        a {
+            color: var(--link);
+        }
+
+        a:hover {
+            color: var(--link-hover);
+        }
+
+        strong {
+            font-weight: 700;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ============================================================
+           Hero
+           ============================================================ */
+
+        .hero-paper {
+            background: #ffffff;
+            padding: 3.20rem 1.25rem 2.40rem 1.25rem;
+        }
+
+        .hero-inner {
+            max-width: var(--content-width);
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-title {
+            margin: 0 0 0.60rem 0;
+            color: var(--body-text);
+            font-size: var(--fs-hero-title);
+            font-weight: 500;
+            line-height: 1.15;
+            letter-spacing: -0.025em;
+        }
+
+        .hero-authors {
+            margin: 1.00rem 0 0.30rem 0;
+            color: var(--body-text);
+            font-size: var(--fs-hero-authors);
+            font-style: italic;
+            line-height: 1.35;
+        }
+
+        .hero-authors a {
+            color: var(--body-text);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 3px;
+        }
+
+        .hero-authors a:hover {
+            color: #000000;
+        }
+
+        .hero-affiliations {
+            margin: 0.25rem 0 1.35rem 0;
+            color: #444444;
+            font-size: var(--fs-hero-affiliations);
+            font-style: italic;
+            line-height: 1.38;
+        }
+
+        .hero-description {
+            max-width: var(--text-width);
+            margin: 1.15rem auto 1.00rem auto;
+            color: var(--body-text);
+            font-size: var(--fs-hero-description);
+            line-height: 1.60;
+            text-align: left;
+        }
+
+        .hero-teaser {
+            max-width: 700px;
+            margin: 1.10rem auto 1.20rem auto;
+        }
+
+        .hero-teaser img {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .hero-takeaways {
+            max-width: var(--text-width);
+            margin: 0.85rem auto 1.35rem auto;
+            padding-left: 1.35rem;
+            color: var(--body-text);
+            font-size: var(--fs-hero-takeaways);
+            line-height: 1.50;
+            text-align: left;
+        }
+
+        .hero-takeaways li {
+            margin-bottom: 0.45rem;
+            font-size: inherit;
+            line-height: inherit;
+        }
+
+        .hero-takeaways li:last-child {
+            margin-bottom: 0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.80rem;
+            flex-wrap: wrap;
+            margin-top: 1.25rem;
+        }
+
+        .hero-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.42rem;
+            color: var(--body-text);
+            font-size: var(--fs-hero-button);
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            line-height: 1.30;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .hero-button:hover {
+            color: #000000;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .hero-button i {
+            font-size: 0.92em;
+            line-height: 1;
+        }
+
+        .hero-button svg {
+            width: 1.05em;
+            height: 1.05em;
+            flex: 0 0 auto;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .hero-venue {
+            margin-top: 1.45rem;
+            color: var(--body-text);
+            font-size: var(--fs-hero-venue);
+            font-weight: 600;
+            letter-spacing: 0.08em;
+        }
+
+        .hero-divider {
+            max-width: var(--content-width);
+            height: 1px;
+            margin: 2.20rem auto 0 auto;
+            background: var(--line);
+        }
+
+        /* ============================================================
+           Unified content sections
+           ============================================================ */
+
+        .container.blog.main,
+        .content-section {
+            max-width: var(--content-width);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .content-section {
+            margin-top: 2.15rem;
+        }
+
+        .content-section > h1,
+        .content-heading h1 {
+            margin: 0 0 0.1rem 0;
+            color: var(--body-text);
+            font-size: var(--fs-content-title);
+            font-weight: 600;
+            line-height: 1.18;
+            letter-spacing: -0.015em;
+        }
+
+        .content-heading {
+            margin-bottom: 1.25rem;
+        }
+
+        .content-heading .content-subtitle {
+            margin-bottom: 0.45rem;
+            color: var(--muted-text);
+            font-size: var(--fs-content-subtitle);
+            font-weight: 500;
+            line-height: 1.35;
+        }
+
+        .content-heading .content-line {
+            width: 100%;
+            height: 1px;
+            margin-top: 0.0rem;
+            background: var(--line);
+        }
+
+        .body-text {
+            max-width: var(--text-width);
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--body-text);
+            font-size: var(--fs-body);
+            line-height: 1.72;
+        }
+
+        .body-text + .body-text {
+            margin-top: 0.85rem;
+        }
+
+        .body-caption {
+            color: var(--muted-text);
+            font-size: var(--fs-caption);
+            line-height: 1.55;
+        }
+
+        /* ============================================================
+           Context comparison block
+           ============================================================ */
+
+        .context-row {
+            display: grid;
+            grid-template-columns: 165px minmax(300px, 1fr) minmax(270px, 0.92fr);
+            gap: 1.35rem;
+            align-items: center;
+            max-width: var(--content-width);
+            margin: 0 auto;
+            padding: 1.00rem 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .context-label {
+            color: var(--body-text);
+            font-size: var(--fs-context-label);
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        .context-math {
+            overflow-x: auto;
+            padding: 0.15rem 0;
+            color: #111111;
+            font-size: var(--fs-context-math);
+        }
+
+        .context-math .MathJax,
+        .context-math .MathJax_Display {
+            font-size: 90% !important;
+        }
+
+        .context-note {
+            color: var(--muted-text);
+            font-size: var(--fs-context-note);
+            line-height: 1.58;
+        }
+
+        /* ============================================================
+           Figures
+           ============================================================ */
+
+        .figure-center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .figure-60 { width: 60%; }
+        .figure-70 { width: 70%; }
+        .figure-80 { width: 80%; }
+        .figure-90 { width: 90%; }
+        .figure-100 { width: 100%; }
+
+        /* ============================================================
+           Tables
+           ============================================================ */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin: 0.75rem 0 1.25rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: var(--fs-table);
+            line-height: 1.45;
+        }
+
+        table th,
+        table td {
+            padding: 0.55rem 0.70rem;
+            border-bottom: 1px solid #e5e5e5;
+            vertical-align: middle;
+        }
+
+        table th {
+            font-weight: 600;
+            color: var(--body-text);
+            background: #fafafa;
+        }
+
+        table td {
+            color: var(--body-text);
+        }
+
+        table tbody strong {
+            font-weight: 700;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .result-card {
+            margin-top: 1.00rem;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            background: #ffffff;
+        }
+
+        .result-card-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.00rem;
+            align-items: flex-end;
+            padding: 0.95rem 0 0.50rem 0;
+        }
+
+        .result-card-title {
+            margin: 0;
+            color: var(--body-text);
+            font-size: 1.00rem;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        .result-card-note {
+            margin: 0;
+            color: var(--muted-text);
+            font-size: 0.82rem;
+            line-height: 1.45;
+            text-align: right;
+        }
+
+        .result-slide {
+            padding-bottom: 0.75rem;
+        }
+
+        .result-table th {
+            white-space: nowrap;
+            color: #222222;
+            background: #f4f4f4;
+        }
+
+        .result-table td:first-child,
+        .result-table th:first-child {
+            text-align: left;
+        }
+
+        .result-table td:not(:first-child),
+        .result-table th:not(:first-child) {
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .result-table .row-group td {
+            padding-top: 0.76rem;
+            padding-bottom: 0.32rem;
+            border-top: 1px solid #333333;
+            border-bottom: 0;
+            color: #111111;
+            font-family: "Times New Roman", Times, serif !important;
+            font-size: 1.04rem;
+            font-style: italic;
+            font-weight: 400;
+            letter-spacing: 0;
+            text-transform: none;
+            background: #ffffff;
+        }
+
+        .result-table .row-group td * {
+            font-family: "Times New Roman", Times, serif !important;
+            font-style: italic;
+        }
+
+        .result-table .row-group .MathJax,
+        .result-table .row-group .MathJax_Display {
+            font-size: 100% !important;
+        }
+
+        .result-table .ours td {
+            background: #fafafa;
+        }
+
+        .result-table .best td {
+            color: #111111;
+            font-weight: 600;
+            background: #f1f1f1;
+        }
+
+        .result-summary {
+            max-width: var(--text-width);
+            margin: 0.75rem auto 0 auto;
+            color: var(--muted-text);
+            font-size: 0.86rem;
+            line-height: 1.55;
+            text-align: center;
+        }
+
+        .analysis-gif-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.05rem;
+            align-items: start;
+            margin-top: 1.05rem;
+        }
+
+        .analysis-gif-item {
+            text-align: center;
+        }
+
+        .analysis-gif-item img {
+            display: block;
+            width: 100%;
+            border: 1px solid #e0e0e0;
+            background: #ffffff;
+        }
+
+        .analysis-gif-item .body-caption {
+            margin: 0.45rem 0 0 0;
+            font-size: 0.80rem;
+            text-align: center;
+        }
+
+        .analysis-panel {
+            display: block;
+            padding-bottom: 0.70rem;
+        }
+
+        .analysis-panel img {
+            display: block;
+            width: min(100%, 820px);
+            margin: 0 auto;
+            border: 1px solid #e0e0e0;
+            background: #ffffff;
+        }
+
+        .analysis-notes {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.85rem;
+            margin-top: 0.95rem;
+        }
+
+        .analysis-note {
+            padding: 0.85rem 0.90rem;
+            border-top: 1px solid #d8d8d8;
+            background: #fafafa;
+        }
+
+        .analysis-note-title {
+            margin: 0 0 0.25rem 0;
+            color: var(--body-text);
+            font-size: 0.90rem;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        .analysis-note-text {
+            margin: 0;
+            color: var(--muted-text);
+            font-size: 0.82rem;
+            line-height: 1.55;
+        }
+
+        /* ============================================================
+           Slide dots
+           ============================================================ */
+
+        .slide-menu {
+            display: flex;
+            justify-content: center;
+            margin: 0.50rem 0 1.00rem 0;
+        }
+
+        .dots {
+            display: flex;
+            gap: 0.55rem;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .dot {
+            width: 0.62rem;
+            height: 0.62rem;
+            border-radius: 50%;
+            background: #cfcfcf;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.15s ease;
+        }
+
+        .dot.active {
+            background: #333333;
+            transform: scale(1.10);
+        }
+
+        .dot:hover {
+            background: #777777;
+        }
+
+        /* ============================================================
+           Columns
+           ============================================================ */
+
+        .columns-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.25rem;
+            align-items: start;
+        }
+
+        /* ============================================================
+           Code / BibTeX
+           ============================================================ */
+
+        pre {
+            overflow-x: auto;
+            padding: 1.00rem 1.15rem;
+            border-radius: 6px;
+            background: #f6f6f6;
+            border: 1px solid #e0e0e0;
+        }
+
+        code {
+            font-size: 0.88rem;
+        }
+
+        /* ============================================================
+           Footer
+           ============================================================ */
+
+        footer {
+            margin-top: 3.00rem;
+            padding: 2.00rem 1.25rem;
+            border-top: 1px solid var(--line);
+            color: var(--muted-text);
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* ============================================================
+           Responsive
+           ============================================================ */
+
+        @media (max-width: 900px) {
+            :root {
+                --fs-hero-title: 2.05rem;
+                --fs-hero-authors: 1.05rem;
+                --fs-hero-affiliations: 0.92rem;
+                --fs-hero-description: 0.98rem;
+                --fs-hero-button: 0.86rem;
+                --fs-hero-venue: 1.08rem;
+
+                --fs-content-title: 1.65rem;
+                --fs-content-subtitle: 0.98rem;
+                --fs-body: 1.00rem;
+                --fs-caption: 0.90rem;
+                --fs-table: 0.84rem;
+                --fs-context-math: 0.92rem;
+            }
+
+            .hero-paper {
+                padding-top: 2.40rem;
+                padding-bottom: 2.00rem;
+            }
+
+            .hero-inner {
+                max-width: 100%;
+            }
+
+            .hero-buttons {
+                gap: 1.15rem;
+            }
+
+            .context-row {
+                grid-template-columns: 1fr;
+                gap: 0.45rem;
+                align-items: start;
+            }
+
+            .columns-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .analysis-gif-grid,
+            .analysis-notes {
+                grid-template-columns: 1fr;
+            }
+
+            .result-card-header {
+                display: block;
+            }
+
+            .result-card-note {
+                margin-top: 0.25rem;
+                text-align: left;
+            }
+
+            .figure-60,
+            .figure-70,
+            .figure-80,
+            .figure-90 {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 560px) {
+            :root {
+                --fs-hero-title: 1.78rem;
+                --fs-hero-authors: 0.98rem;
+                --fs-hero-affiliations: 0.86rem;
+                --fs-hero-description: 0.95rem;
+                --fs-hero-takeaways: 0.88rem;
+                --fs-content-title: 1.45rem;
+            }
+
+            .hero-paper {
+                padding-left: 1.00rem;
+                padding-right: 1.00rem;
+            }
+
+            .hero-takeaways {
+                padding-left: 1.10rem;
+            }
+
+            table th,
+            table td {
+                padding: 0.45rem 0.55rem;
+            }
+        }
+
+        h2.content-subtitle {
+            max-width: var(--content-width);
+            margin: 0.2rem auto 1rem auto; 
+            color: var(--body-text);
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.30;
+        }
+
+        /* 如果 H2 是紧跟在大标题的分割线下面，稍微减小顶部间距 */
+        .content-heading + h2.content-subtitle {
+            margin-top: 1.2rem;
+        }
+
+        .display-equation {
+            max-width: var(--text-width);
+            margin: 0.85rem auto 1.05rem auto;
+            overflow-x: auto;
+            color: var(--body-text);
+            font-size: 0.82rem;
+            text-align: center;
+        }
+
+        .display-equation .MathJax,
+        .display-equation .MathJax_Display {
+            font-size: 88% !important;
+        }
+
+        .method-two-column {
+            max-width: var(--content-width);
+            margin: 0.60rem auto 0 auto;
+            grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.75fr);
+            gap: 1.40rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .method-two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .content-subtitle {
+                font-size: 1.15rem;
+            }
+        }
+
+        .context-row:last-of-type {
+            margin-bottom: 1.5rem;
+        }
+
+        .context-row + .body-text {
+            margin-top: 1.5rem;
+        }
+
+        .methods-section .content-heading {
+            margin-bottom: 0.35rem !important;
+        }
+
+        .methods-section .content-heading + h2.content-subtitle {
+            margin-top: 0.0rem !important;
+            margin-bottom: 1.25rem !important;
+        }
+
+        /* Methods: spacing between figure, caption, and following body text */
+        .methods-section img.figure-center + .body-caption {
+            margin-top: 0.75rem !important;
+            margin-bottom: 1.25rem !important;
+        }
+
+        .methods-section .body-caption + .body-text {
+            margin-top: 1.35rem !important;
+        }
+
+        /* Hierarchical interaction: right-floating figure */
+        .method-float-block {
+            max-width: var(--content-width);
+            margin: 0 auto;
+        }
+
+        .method-float-block::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .method-float-block .body-text {
+            max-width: none;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .method-float-figure {
+            float: right;
+            width: 30%;
+            min-width: 220px;
+            margin: 0.15rem 0 1.00rem 1.60rem;
+            text-align: center;
+        }
+
+        .method-float-figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .method-float-figure .body-caption {
+            margin-top: 0.75rem;
+            font-size: var(--fs-caption);
+            line-height: 1.55;
+            text-align: center;
+        }
+
+        .method-float-block .display-equation {
+            max-width: none;
+            margin: 0.80rem 0 1.00rem 0;
+        }
+
+        /* Mobile: no float */
+        @media (max-width: 900px) {
+            .method-float-figure {
+                float: none;
+                width: 80%;
+                min-width: 0;
+                margin: 0.50rem auto 1.20rem auto;
+            }
+
+            .method-float-block .body-text {
+                max-width: var(--text-width);
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .method-float-block .display-equation {
+                max-width: var(--text-width);
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- ==============================================
+         1. Hero / Project Overview
+         ============================================== -->
+    <div class="hero-paper" id="first-content">
+        <div class="hero-inner">
+
+            <h1 class="hero-title">
+                Winfree Oscillatory Neural Network
+            </h1>
+
+            <p class="hero-authors">
+                <a href="https://scholar.google.com/citations?user=vlo0oe0AAAAJ&hl=zh-CN" target="_blank">Jiawen Dai</a><sup>3</sup>
+                &nbsp;&nbsp;&nbsp;
+                <a href="https://scholar.google.com/citations?user=Uza2i10AAAAJ&hl=en&oi=ao" target="_blank">Yue Song</a><sup>1,2</sup>
+            </p>
+
+            <p class="hero-affiliations">
+                <sup>1</sup> Shanghai Qi Zhi Institute &nbsp;&nbsp;
+                <sup>2</sup> Tsinghua University &nbsp;&nbsp;
+                <sup>3</sup> Shanghai Jiao Tong University
+            </p>
+
+            <p class="hero-description">
+                We introduce <strong>Winfree Oscillatory Neural Networks (<em>WONN</em>)</strong>,
+                a dynamical neural architecture that evolves neural representations as phase
+                oscillators on the toroidal phase space \((S^1)^d\). Generalized Winfree
+                synchronization dynamics organize oscillators into structured collective states,
+                enabling scalable computation for image recognition and structured reasoning.
+            </p>
+
+            <div class="hero-teaser">
+                <img src="static/images/figure1.png" alt="WONN teaser">
+            </div>
+
+
+            <ul class="hero-takeaways">
+                <li>
+                    <em>WONN</em> evolves representations on the torus \((S^1)^d\).
+                </li>
+
+                <li>
+                    To our knowledge, <em>WONN</em> is the first synchrony-based oscillatory architecture to scale competitively to ImageNet-1K.
+                </li>
+
+                <li>
+                    On Maze-hard, WONN achieves 80.1% accuracy using only 1% of the parameters of prior state-of-the-art models.
+                </li>
+            </ul>
+
+            <div class="hero-buttons">
+                <a href="" target="_blank" class="hero-button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path>
+                    </svg>
+                    Paper
+                </a>
+
+                <a href="https://github.com/Jiawen-Dai/WONN.git" target="_blank" class="hero-button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m16 18 6-6-6-6"></path>
+                        <path d="m8 6-6 6 6 6"></path>
+                    </svg>
+                    Code
+                </a>
+
+                <a href="#bibtex" class="hero-button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 21c3 0 7-2 7-8V5H3v8h4c0 3-2 5-4 5z"></path>
+                        <path d="M14 21c3 0 7-2 7-8V5h-7v8h4c0 3-2 5-4 5z"></path>
+                    </svg>
+                    BibTeX
+                </a>
+            </div>
+
+
+
+            <div class="hero-divider"></div>
+        </div>
+    </div>
+
+
+    <!-- ==============================================
+         2. Preliminaries
+         ============================================== -->
+    <div class="container blog main content-section" id="blog-main">
+        <div class="content-heading">
+            <h1>Preliminaries : From Winfree Dynamics to <em>WONN</em></h1>
+
+            <div class="content-line"></div>
+        </div>
+
+        <p class="body-text">
+            Each oscillator has a phase \( \theta_i \), a natural frequency \( \omega_i \),
+            and coupling coefficients \( K_{ij} \) or \( c_{ij} \). The central distinction
+            is whether interactions depend on pairwise phase differences or on separable
+            sensitivity--influence functions.
+        </p>
+
+        <div class="context-row">
+            <div class="context-label">Winfree Dynamics</div>
+
+            <div class="context-math">
+                \[
+                \dot{\theta}_i =
+                \omega_i + \frac{\kappa}{N} S(\theta_i)
+                \sum_{j=1}^{N} I(\theta_j),
+                \qquad i = 1,\ldots,N .
+                \]
+            </div>
+
+            <div class="context-note">
+                A receiving oscillator responds through its sensitivity \(S(\theta_i)\)
+                to the aggregated influence \(I(\theta_j)\) from other oscillators.
+            </div>
+        </div>
+
+        <div class="context-row">
+            <div class="context-label">Kuramoto Dynamics</div>
+
+            <div class="context-math">
+                \[
+                \dot{\theta}_i =
+                \omega_i + \gamma \sum_{j=1}^{N}
+                K_{ij} \sin(\theta_j - \theta_i).
+                \]
+            </div>
+
+            <div class="context-note">
+                Interactions depend only on relative phase differences
+                \( \theta_j - \theta_i \), giving a phase-shift invariant
+                synchronization model.
+            </div>
+        </div>
+
+        <div class="context-row">
+            <div class="context-label">Symmetry Breaking</div>
+
+            <div class="context-math">
+                \[
+                \dot{\theta}_i =
+                \omega_i + \gamma \sum_{j=1}^{N}
+                K_{ij}
+                \left[
+                \sin(\theta_j - \theta_i)
+                + q \sin(\theta_j + \theta_i)
+                \right].
+                \]
+            </div>
+
+            <div class="context-note">
+                The extra \(q\)-term breaks global phase-shift symmetry and allows
+                interactions to depend on absolute phase configurations.
+            </div>
+        </div>
+
+        <div class="context-row">
+            <div class="context-label">Separable Form</div>
+
+            <div class="context-math">
+                \[
+                q = 1: \qquad
+                \dot{\theta}_i =
+                \omega_i + 2\gamma \cos\theta_i
+                \sum_{j=1}^{N} K_{ij}\sin\theta_j .
+                \]
+            </div>
+
+            <div class="context-note">
+                This recovers a Winfree-style decomposition with
+                \(S(\theta_i)=\cos\theta_i\) and \(I(\theta_j)=\sin\theta_j\).
+            </div>
+        </div>
+
+        <div class="context-row">
+            <div class="context-label">Geometric Structure</div>
+
+            <div class="context-math">
+                \[
+                \Theta = (\theta_1,\ldots,\theta_d)
+                \in \mathcal{M} := \mathbb{T}^{d} \simeq (S^1)^d,
+                \qquad
+                T_{\Theta}\mathcal{M} \simeq \mathbb{R}^{d}.
+                \]
+            </div>
+
+            <div class="context-note">
+                <em>WONN</em> represents neural states as phase variables on a toroidal
+                manifold, with updates locally computed in the tangent space.
+            </div>
+        </div>
+
+        <p class="body-text">
+            <strong>Key message.</strong>
+            Kuramoto dynamics is governed by relative phase differences, whereas
+            Winfree dynamics separates a receiving oscillator's sensitivity \(S(\theta_i)\)
+            from neighboring oscillators' influence \(I(\theta_j)\).
+            <em>WONN</em> turns this principle into a learnable neural architecture
+            on \((S^1)^d\).
+        </p>
+    </div>
+    
+    <!-- ==============================================
+     Methods
+     ============================================== -->
+    <div class="container blog main content-section methods-section">
+    <div class="content-heading">
+        <h1>Methods</h1>
+        <div class="content-line"></div>
+    </div>
+
+    <h2 class="content-subtitle">Winfree Oscillatory Neural Architecture</h2>
+
+    <img src="static/images/net.png"
+         alt="Winfree Oscillatory Neural Network architecture"
+         class="figure-center figure-90">
+
+    <p class="body-caption">
+        Overview of the <strong>Winfree Oscillatory Neural Network</strong>.
+        WONN initializes phase and frequency states, repeatedly applies Winfree dynamics,
+        and updates both states through layer transitions.
+    </p>
+
+    <p class="body-text">
+        <em>WONN</em> encodes the input into an initial frequency state
+        \( \Omega_{\mathrm{init}} \), while the phase state
+        \( \Theta_{\mathrm{init}} \) is randomly initialized. Each Winfree dynamics layer
+        performs \(T\) parameter-shared recurrent updates, followed by a layer-transition
+        update of both phase and frequency states. Through iterative synchronization,
+        <em>WONN</em> evolves structured oscillatory representations before prediction.
+    </p>
+
+    <p class="body-text">
+        At the core of <em>WONN</em> is a discretized Winfree evolution. For each layer
+        \(l\), we perform \(T\) recurrent updates:
+    </p>
+
+    <div class="display-equation">
+        \[
+        \theta_i^{(l,t+1)}
+        =
+        \theta_i^{(l,t)}
+        +
+        \gamma
+        \left[
+        \omega_i^{(l)}
+        +
+        S\!\left(\theta_i^{(l,t)}\right)
+        \sum_j c_{ij}\,
+        I\!\left(\theta_j^{(l,t)}\right)
+        \right],
+        \qquad
+        t = 1,\ldots,T .
+        \]
+    </div>
+
+    <p class="body-text">
+        Here \( \theta_i^{(l,t)} \) denotes the phase of oscillator \(i\) at recurrent
+        step \(t\) in layer \(l\), \( \omega_i^{(l)} \) is its natural frequency,
+        \(S\) is a sensitivity function, \(I\) is an influence function, and
+        \(c_{ij}\) is the coupling coefficient between oscillators \(i\) and \(j\).
+        The recurrent steps share parameters within each layer, so the network behaves
+        as a controlled dynamical system over phase variables rather than as a purely
+        feed-forward stack.
+    </p>
+
+    <h2 class="content-subtitle">Hierarchical Sensitivity–Influence Interaction Mechanism</h2>
+
+        <div class="method-float-block">
+            <figure class="method-float-figure">
+                <img src="static/images/grouped_si.png"
+                    alt="Hierarchical sensitivity-influence interaction">
+
+                <figcaption class="body-caption method-caption">
+                    Illustration of S and I
+                </figcaption>
+            </figure>
+
+            <p class="body-text">
+                Winfree dynamics differs from Kuramoto-type phase interaction by separating
+                the response of the receiving oscillator from the signal emitted by its
+                neighbors. In <em>WONN</em>, the receiving side is modeled by the sensitivity
+                function \(S\), while the sending side is modeled by the influence function
+                \(I\). This separation allows the interaction to depend not only on relative
+                phase differences, but also on the absolute phase configuration of the
+                oscillatory representation.
+            </p>
+
+            <p class="body-text">
+                To capture structured spatial interactions, <em>WONN</em> partitions oscillators
+                into local groups \( \mathcal{G}_{p,q} \). Each group aggregates local phase
+                states into a shared group-level influence signal:
+            </p>
+
+            <div class="display-equation">
+                \[
+                I_{p,q}^{\mathrm{patch}}
+                =
+                I_{\mathrm{patch}}
+                \left(
+                \{ \theta_{i,j} \}_{(i,j)\in \mathcal{G}_{p,q}}
+                \right).
+                \]
+            </div>
+
+            <p class="body-text">
+                This mechanism induces hierarchical synchronization: oscillators coordinate
+                within local groups, while group-level influence signals communicate across
+                larger spatial regions. The coupling \(c_{ij}\) can be instantiated by local
+                convolution or global attention, allowing <em>WONN</em> to interpolate between
+                local oscillatory computation and long-range synchronization.
+            </p>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         4. Image Experiments
+         ============================================== -->
+    <div class="container blog main content-section">
+        <div class="content-heading">
+            <h1>Image Experimental Results</h1>
+            <div class="content-line"></div>
+        </div>
+
+        <p class="body-text">
+            <em>WONN</em> is evaluated on CIFAR-10/100 and ImageNet-100/1K. The tables report
+            accuracy and parameter count, comparing WONN with standard convolutional, transformer,
+            and synchrony-based baselines.
+        </p>
+
+        <div class="slide-menu">
+            <ul class="dots" id="image-slide-menu">
+                <li class="dot active" onclick="showResultSlide('image', 0)"></li>
+                <li class="dot" onclick="showResultSlide('image', 1)"></li>
+            </ul>
+        </div>
+
+        <div class="result-card">
+            <div class="result-slide image-slide" style="display: block;">
+                <div class="result-card-header">
+                    <h2 class="result-card-title">CIFAR-10 / CIFAR-100</h2>
+                    <p class="result-card-note">Accuracy is reported as mean ± std over three seeds.</p>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>CIFAR-10 Acc.</th>
+                                <th>Params</th>
+                                <th>CIFAR-100 Acc.</th>
+                                <th>Params</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>ResNet-18</td><td>93.48 ± 0.16</td><td>11.17M</td><td>70.53 ± 0.10</td><td>11.22M</td></tr>
+                            <tr><td>ResNet-50</td><td>94.22 ± 0.14</td><td>23.52M</td><td>73.54 ± 0.41</td><td>23.71M</td></tr>
+                            <tr><td>ViT-T<sup>†</sup></td><td>90.34 ± 0.18</td><td>5.36M</td><td>67.59 ± 0.44</td><td>5.38M</td></tr>
+                            <tr><td>ViT-S<sup>†</sup></td><td>93.43 ± 0.29</td><td>21.34M</td><td>71.18 ± 0.62</td><td>21.38M</td></tr>
+                            <tr><td>ViT-B<sup>†</sup></td><td>92.04 ± 0.25</td><td>85.15M</td><td>71.05 ± 0.40</td><td>85.22M</td></tr>
+                            <tr><td>AKOrN<sup><em>attn</em></sup></td><td>93.66 ± 0.17</td><td>4.60M</td><td>72.03 ± 0.34</td><td>4.62M</td></tr>
+                            <tr class="row-group"><td colspan="5">\(S(\theta_i)\)&amp;\(I(\theta_i)\) as MLPs</td></tr>
+                            <tr class="ours"><td>WONN (Ch = 128 → 128)</td><td>94.55 ± 0.09</td><td>3.08M</td><td>73.77 ± 0.40</td><td>3.09M</td></tr>
+                            <tr class="ours"><td>WONN (Ch = 64 → 256)</td><td>95.12 ± 0.04</td><td>7.54M</td><td>75.12 ± 0.49</td><td>7.56M</td></tr>
+                            <tr class="ours best"><td>WONN (Ch = 256 → 256)</td><td>95.24 ± 0.12</td><td>12.02M</td><td>76.20 ± 0.45</td><td>12.04M</td></tr>
+                            <tr class="row-group"><td colspan="5">\(S(\theta_i)\)&amp;\(I(\theta_i)\) as trigonometric functions</td></tr>
+                            <tr class="ours"><td>WONN (Ch = 128 → 128)</td><td>94.50 ± 0.15</td><td>2.98M</td><td>74.48 ± 0.16</td><td>3.00M</td></tr>
+                            <tr class="ours"><td>WONN (Ch = 64 → 256)</td><td>95.08 ± 0.07</td><td>7.40M</td><td>75.81 ± 0.33</td><td>7.43M</td></tr>
+                            <tr class="ours best"><td>WONN (Ch = 256 → 256)</td><td>95.26 ± 0.05</td><td>11.84M</td><td>76.17 ± 0.52</td><td>11.86M</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="result-slide image-slide" style="display: none;">
+                <div class="result-card-header">
+                    <h2 class="result-card-title">ImageNet-100 / ImageNet-1K</h2>
+                    <p class="result-card-note">WONN scales to ImageNet-1K with competitive accuracy and fewer parameters.</p>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>ImageNet-100 Acc.</th>
+                                <th>Params</th>
+                                <th>ImageNet-1K Acc.</th>
+                                <th>Params</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>ResNet-18</td><td>78.20</td><td>11.23M</td><td>69.73</td><td>11.69M</td></tr>
+                            <tr><td>ResNet-50</td><td>81.18</td><td>23.71M</td><td>76.89</td><td>25.56M</td></tr>
+                            <tr><td>ViT-S-16<sup>†</sup></td><td>77.96</td><td>21.70M</td><td>75.54</td><td>22.05M</td></tr>
+                            <tr><td>ViT-B-16<sup>†</sup></td><td>76.36</td><td>85.87M</td><td>75.85</td><td>86.57M</td></tr>
+                            <tr><td>AKOrN<sup><em>attn</em></sup></td><td>80.08</td><td>4.62M</td><td>67.45</td><td>4.85M</td></tr>
+                            <tr class="row-group"><td colspan="5">\(S(\theta_i)\)&amp;\(I(\theta_i)\) as MLPs</td></tr>
+                            <tr class="ours"><td>WONN (Ch = 128 → 128)</td><td>81.50</td><td>3.09M</td><td>–</td><td>–</td></tr>
+                            <tr class="ours"><td>WONN (Ch = 64 → 256)</td><td>82.04</td><td>7.56M</td><td>74.84</td><td>7.79M</td></tr>
+                            <tr class="ours best"><td>WONN (Ch = 256 → 256)</td><td>82.88</td><td>12.05M</td><td>76.78</td><td>12.28M</td></tr>
+                            <tr class="row-group"><td colspan="5">\(S(\theta_i)\)&amp;\(I(\theta_i)\) as trigonometric functions</td></tr>
+                            <tr class="ours"><td>WONN (Ch = 128 → 128)</td><td>81.76</td><td>3.00M</td><td>–</td><td>–</td></tr>
+                            <tr class="ours best"><td>WONN (Ch = 64 → 256)</td><td>82.56</td><td>7.43M</td><td>–</td><td>–</td></tr>
+                            <tr class="ours"><td>WONN (Ch = 256 → 256)</td><td>82.22</td><td>11.87M</td><td>–</td><td>–</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <p class="result-summary">
+            <sup>†</sup> ViT baselines use additional regularization such as CutMix and label smoothing.
+        </p>
+    </div>
+
+    <!-- ==============================================
+         5. Reasoning Experiments
+         ============================================== -->
+    <div class="container blog main content-section">
+        <div class="content-heading">
+            <h1>Reasoning Experimental Results</h1>
+            <div class="content-line"></div>
+        </div>
+
+        <p class="body-text">
+            On structured reasoning tasks, <em>WONN</em> uses oscillatory dynamics to form coherent
+            solutions over time. We report Maze-hard pathfinding and Sudoku solving results.
+        </p>
+
+        <div class="slide-menu">
+            <ul class="dots" id="reasoning-slide-menu">
+                <li class="dot active" onclick="showResultSlide('reasoning', 0)"></li>
+                <li class="dot" onclick="showResultSlide('reasoning', 1)"></li>
+            </ul>
+        </div>
+
+        <div class="result-card">
+            <div class="result-slide reasoning-slide" style="display: block;">
+                <div class="result-card-header">
+                    <h2 class="result-card-title">Maze-hard Pathfinding</h2>
+                    <p class="result-card-note">Energy Voting selects the lowest-energy solution among 32 sampled trajectories.</p>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Accuracy</th>
+                                <th>Parameters</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row-group"><td colspan="3">LLMs</td></tr>
+                            <tr><td>DeepSeek R1</td><td>0.0</td><td>671B</td></tr>
+                            <tr><td>Claude 3.7 8K</td><td>0.0</td><td>?</td></tr>
+                            <tr><td>O3-mini-high</td><td>0.0</td><td>?</td></tr>
+                            <tr class="row-group"><td colspan="3">Recurrent models</td></tr>
+                            <tr><td>HRM</td><td>74.5</td><td>27M</td></tr>
+                            <tr><td>TRM-Att (dihedral augmented)</td><td>85.3</td><td>7M</td></tr>
+                            <tr><td>TRM-MLP (dihedral augmented)</td><td>0.0</td><td>19M</td></tr>
+                            <tr class="row-group"><td colspan="3">Other synchrony-based model</td></tr>
+                            <tr><td>AKOrN<sup><em>attn</em></sup></td><td>36.2</td><td>1M</td></tr>
+                            <tr class="ours"><td>WONN</td><td>76.2</td><td>0.396M</td></tr>
+                            <tr class="ours best"><td>WONN (Energy Voting)</td><td>80.1</td><td>0.396M</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="result-slide reasoning-slide" style="display: none;">
+                <div class="result-card-header">
+                    <h2 class="result-card-title">Sudoku Solving</h2>
+                    <p class="result-card-note">Results are averaged over five runs on 1,000 test boards.</p>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Accuracy</th>
+                                <th>Parameters</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>SAT-Net</td><td>98.3</td><td>0.618M</td></tr>
+                            <tr><td>RRN</td><td>99.8</td><td>0.201M</td></tr>
+                            <tr><td>R-Transformer</td><td>100.0</td><td>0.211M</td></tr>
+                            <tr><td>Transformer</td><td>98.6 ± 0.3</td><td>16.87M</td></tr>
+                            <tr><td>HRM</td><td>99.7 ± 0.2</td><td>27.28M</td></tr>
+                            <tr><td>AKOrN<sup><em>attn</em></sup> (T = 16)</td><td>99.8 ± 0.1</td><td>2.98M</td></tr>
+                            <tr class="row-group"><td colspan="3">\(S(\theta_i)\)&amp;\(I(\theta_i)\) as trigonometric functions</td></tr>
+                            <tr class="ours best"><td>WONN (T = 16)</td><td>100.0 ± 0.0</td><td>1.58M</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         6. Experimental Analysis
+         ============================================== -->
+    <div class="container blog main content-section">
+        <div class="content-heading">
+            <h1>Experimental Analysis</h1>
+            <div class="content-line"></div>
+        </div>
+
+        <p class="body-text">
+            Beyond final accuracy, <em>WONN</em> exposes interpretable dynamics: candidate
+            paths synchronize over recurrent steps, phase distributions organize into two
+            complementary modes, and interaction energy provides a useful diagnostic.
+        </p>
+
+        <h2 class="content-subtitle">Synchronous Pathfinding on Maze-hard</h2>
+
+        <div class="analysis-gif-grid">
+            <figure class="analysis-gif-item">
+                <img src="static/images/maze_wonn_1_prob.gif" alt="WONN Maze-hard path probability evolution, example 1">
+                <figcaption class="body-caption">Example 1</figcaption>
+            </figure>
+
+            <figure class="analysis-gif-item">
+                <img src="static/images/maze_wonn_24_prob.gif" alt="WONN Maze-hard path probability evolution, example 2">
+                <figcaption class="body-caption">Example 2</figcaption>
+            </figure>
+
+            <figure class="analysis-gif-item">
+                <img src="static/images/maze_wonn_25_prob.gif" alt="WONN Maze-hard path probability evolution, example 3">
+                <figcaption class="body-caption">Example 3</figcaption>
+            </figure>
+        </div>
+
+        <p class="result-summary">
+            WONN initially activates multiple diffuse path fragments. As the oscillatory
+            dynamics evolve, compatible fragments synchronize into a coherent path while
+            inconsistent candidates are suppressed.
+        </p>
+
+        <div class="slide-menu">
+            <ul class="dots" id="analysis-slide-menu">
+                <li class="dot active" onclick="showResultSlide('analysis', 0)"></li>
+                <li class="dot" onclick="showResultSlide('analysis', 1)"></li>
+            </ul>
+        </div>
+
+        <div class="result-card">
+            <div class="result-slide analysis-slide" style="display: block;">
+                <div class="result-card-header">
+                    <h2 class="result-card-title">Two-Peak Phase Distribution</h2>
+                    <p class="result-card-note">Phase modes reveal complementary visual structures.</p>
+                </div>
+
+                <div class="analysis-panel">
+                    <img src="static/images/two_peak.png" alt="Two-peak phase distribution in WONN">
+
+                    <div class="analysis-notes">
+                        <div class="analysis-note">
+                            <p class="analysis-note-title">Observation</p>
+                            <p class="analysis-note-text">WONN exhibits a characteristic two-peak phase distribution.</p>
+                        </div>
+
+                        <div class="analysis-note">
+                            <p class="analysis-note-title">Interpretation</p>
+                            <p class="analysis-note-text">The two synchronized phase modes capture complementary object structures.</p>
+                        </div>
+
+                        <div class="analysis-note">
+                            <p class="analysis-note-title">Effect</p>
+                            <p class="analysis-note-text">Coarse global regions are separated from fine local details and boundaries.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-slide analysis-slide" style="display: none;">
+                <div class="result-card-header">
+                    <h2 class="result-card-title">Interaction Energy as a Diagnostic</h2>
+                    <p class="result-card-note">Energy Voting selects the lowest-energy sampled trajectory.</p>
+                </div>
+
+                <div class="analysis-panel">
+                    <img src="static/images/maze_energy.png" alt="Maze-hard accuracy and interaction energy dynamics">
+
+                    <div class="analysis-notes">
+                        <div class="analysis-note">
+                            <p class="analysis-note-title">Energy</p>
+                            <p class="analysis-note-text">\(E_{\mathrm{int}}(\Theta) = -\frac{1}{2}\sum_{i,j} c_{ij}\sin\theta_i\sin\theta_j\).</p>
+                        </div>
+
+                        <div class="analysis-note">
+                            <p class="analysis-note-title">Training</p>
+                            <p class="analysis-note-text">The final interaction energy decreases as pathfinding accuracy improves.</p>
+                        </div>
+
+                        <div class="analysis-note">
+                            <p class="analysis-note-title">Test time</p>
+                            <p class="analysis-note-text">Energy Voting chooses the lowest-energy trajectory among sampled solutions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         7. BibTeX
+         ============================================== -->
+    <div class="container blog main content-section" id="bibtex">
+        <h1>BibTeX</h1>
+        <p class="body-text">If you find our work useful, please consider citing our paper:</p>
+<pre><code class="plaintext">@article{daiwinfree2026,
+  title={Winfree Oscillatory Neural Network},
+  author={Jiawen Dai and Yue Song},
+  year={2026},
+  url={}
+}</code></pre>
+    </div>
+
+
+    <!-- ==============================================
+         9. Footer
+         ============================================== -->
+    <footer>
+        <div class="container">
+            <p style="font-family: 'Poppins', sans-serif;">
+                This website is built on the <a href="https://shikun.io/projects/clarity" target="_blank">Clarity Template</a>, originally designed by Shikun Liu, and incorporates elements from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.<br>
+                Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+        </div>    
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script>
+        function showResultSlide(group, index) {
+            const slides = document.querySelectorAll(`.${group}-slide`);
+            slides.forEach((el, i) => {
+                el.style.display = i === index ? 'block' : 'none';
+            });
+
+            const dots = document.querySelectorAll(`#${group}-slide-menu .dot`);
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+    </script>
+
+</body>
+</html>

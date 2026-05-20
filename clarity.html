@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>Krause Synchronization Transformers</title>
+    <meta name="description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
+    <meta name="keywords" content="Krause Attention, machine learning, computer vision, AI, Large Language Models">
+    <meta name="author" content="Jingkun Liu, Yisong Yue, Max Welling, Yue Song">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    
+    <!-- Clarity Template CSS -->
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/foundation.min.css">
+    <link href="assets/fontawesome-free-7.2.0-web/css/all.min.css" rel="stylesheet">
+    
+    <!-- Fonts - Lora/Charter & Poppins for elegant reading -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Navbar Script - 生成左侧大纲导航栏 -->
+    <script src="assets/scripts/navbar.js"></script> 
+    
+    <!-- MathJax Configuration from Clarity -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            "HTML-CSS": {
+              scale: 95,
+              fonts: ["Gyre-Pagella"],
+              imageFont: null,
+              undefinedFamily: "'Arial Unicode MS', cmbright"
+            },
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+              }
+          });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        table tbody strong {
+            font-weight: 700;
+        }
+        /* 复刻的高级字体与文本样式 */
+        body, .text, .caption {
+            font-family: 'Charter', 'Bitstream Charter', 'Georgia', serif !important;
+            color: #222222;
+        }
+        h1, h2, h3, h4, .title, .author, .abstract, .button, .conference {
+            font-family: 'Poppins', sans-serif !important;
+        }
+        .abstract { font-size: 1.1rem; color: #555; }
+        .author a { color: #333; text-decoration: underline; text-decoration-color: #aaa; text-underline-offset: 3px; }
+        .author a:hover { color: #000; text-decoration-color: #000; }
+        .affiliation { font-family: 'Poppins', sans-serif; font-size: 0.95rem; color: #666; margin-top: 10px; line-height: 1.5; }
+    </style>
+</head>
+
+<body>
+
+    <!-- ==============================================
+         1. 论文抬头 (Title, Authors, Affiliations, ICML)
+         ============================================== -->
+    <div class="container blog" id="first-content" style="background-color: #F4F6F8; padding-top: 5rem; padding-bottom: 5rem;">
+        <div class="blog-title no-cover" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; margin: 0 auto;">
+            
+            <div style="width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center;">
+                <h1 class="title" style="text-align: center; margin-bottom: 0.5rem;">Krause Synchronization Transformers</h1>
+                
+                <p class="author" style="margin-top: 1.5rem; font-size: 1.25rem; text-align: center;">
+                    <a href="https://scholar.google.com/citations?user=-Zxd9hcAAAAJ&hl=en" target="_blank">Jingkun Liu</a><sup>1,2,3</sup>,
+                    <a href="https://scholar.google.com/citations?user=tEk4qo8AAAAJ&hl=en&oi=ao" target="_blank">Yisong Yue</a><sup>4</sup>,
+                    <a href="https://scholar.google.com/citations?user=8200InoAAAAJ&hl=en&oi=ao" target="_blank">Max Welling</a><sup>5,6</sup>,
+                    <a href="https://scholar.google.com/citations?user=Uza2i10AAAAJ&hl=en&oi=ao" target="_blank">Yue Song</a><sup>1,2</sup>
+                </p>
+                
+                <p class="affiliation" style="text-align: center; margin-top: 1rem;">
+                    <sup>1</sup>Shanghai Qi Zhi Institute &nbsp; &nbsp; 
+                    <sup>2</sup>Tsinghua University &nbsp; &nbsp;
+                    <sup>3</sup>Shanghai Jiao Tong University <br>
+                    <sup>4</sup>California Institute of Technology &nbsp; &nbsp;  
+                    <sup>5</sup>University of Amsterdam &nbsp; &nbsp;
+                    <sup>6</sup>Cusp AI
+                </p>
+
+                <!-- 新增：ICML 会议标示 -->
+                <p class="conference" style="text-align: center; margin-top: 1.5rem; font-weight: 600; font-size: 1.15rem; color: #333; letter-spacing: 0.5px;">
+                    <i class="fa-solid fa-award" style="color: #666; margin-right: 5px;"></i> ICML 2026
+                </p>
+            </div>
+           
+            <div class="info" style="display: flex; justify-content: center; gap: 15px; margin-top: 2.5rem; width: 100%;">
+                <a href="https://arxiv.org/pdf/2602.11534" target="_blank" class="button icon" style="background-color: rgba(0, 0, 0, 0.05); color: #000; border: 1px solid #ddd; margin: 0;">
+                    Paper <i class="fa-solid fa-file-pdf"></i>
+                </a>
+                <a href="https://github.com/Jingkun-Liu/Krause-Synchronization-Transformers.git" target="_blank" class="button icon" style="background-color: rgba(0, 0, 0, 0.05); color: #000; border: 1px solid #ddd; margin: 0;">
+                    Code <i class="fa-brands fa-github"></i>
+                </a>
+            </div>
+            
+        </div>
+    </div>
+
+
+    <!-- ==============================================
+         2. Teaser Section
+         ============================================== -->
+    <!-- 添加 id="blog-main" 确保 navbar 能正确依附 -->
+    <div class="container blog main first" id="blog-main" style="padding-top: 3rem;">
+        <img src="static/images/figure1.png" style="width: 60%; display: block; margin: 0 auto;">
+        <p class="caption" style="text-align: center;">
+            <strong>Krause Attention</strong>, grounded in bounded-confidence interactions, promotes localized multi-cluster synchronization (top). In contrast, standard self-attention tends to induce globally coupled dynamics that concentrate attention onto a dominant mode, often manifesting as attention sinks (Xiao et al., 2024) (bottom).
+        </p>
+    </div>
+
+
+    <!-- ==============================================
+         3. Introduction
+         ============================================== -->
+    <div class="container blog main">
+        <h1>Introduction</h1>
+        <p class="text">
+            Self-attention in Transformers relies on globally normalized softmax weights, causing all tokens to compete for influence at every layer. When composed across depth, this interaction pattern induces strong synchronization dynamics that favor convergence toward a dominant mode, a behavior associated with representation collapse and attention sink phenomena. We introduce <strong>Krause Attention</strong>, a principled attention mechanism inspired by bounded-confidence consensus dynamics. Krause Attention replaces similarity-based global aggregation with distance-based, localized, and selectively sparse interactions, promoting structured local synchronization instead of global mixing. We relate this behavior to recent theory modeling Transformer dynamics as interacting particle systems, and show how bounded-confidence interactions naturally moderate attention concentration and alleviate attention sinks. Restricting interactions to local neighborhoods also reduces runtime complexity from quadratic to linear in sequence length.
+        </p>
+    
+        <p class="text">
+            Empirically, Krause Attention delivers consistent and substantial gains across vision, generation, and language modeling tasks. For image classification, Krause Vision Transformers (ViTs) consistently outperform standard ViTs (Dosovitskiy et al., 2021) on CIFAR-10/100 and ImageNet-1K, achieving an <strong>average accuracy improvement of \( \mathbf{+3.0\%} \)</strong> while <strong>reducing FLOPs by approximately 30%</strong> across model scales. In autoregressive image generation (Parmar et al., 2018), Krause-based models achieve <strong>lower negative log-likelihood</strong> than standard Transformers while enabling <strong>more than 2&times; faster inference</strong>. For large language models (Yang et al., 2024a; Grattafiori et al., 2024) and models trained from scratch, incorporating Krause Attention as an auxiliary pathway consistently improves <strong>zero-shot performance over both LoRA-finetuned (Hu et al., 2022) and from-scratch baselines</strong> across a broad suite of language understanding benchmarks.
+        </p>
+    </div>
+
+
+    <!-- ==============================================
+         4. GIF Animation Block
+         ============================================== -->
+    <div class="container blog main">
+        <h1>Krause Attention Mechanism</h1>
+        <img src="static/images/kst_gif.gif" alt="Krause Attention Animation" style="width: 80%;">
+        <p class="caption" style="text-align: center;">
+            Visual Illustration of our <strong>Krause Attention</strong> dynamics.
+        </p>
+
+        <p class="text">
+            Krause Attention computes RBF affinity scores, restricts updates to spatial local neighborhoods, and applies top-k selective interactions in the representation space.
+        </p>
+
+        <p class="text">
+            By encoding locality and selective interactions into the design, Krause Attention turns clustering from <strong>a fragile, emergent phenomenon</strong> into a more <strong>stable architectural inductive bias</strong>. This helps preserve token diversity and improve robustness against representation collapse.
+    </div>
+
+    <div class="container blog main">
+        <h1>Vision Experimental Results</h1>
+    
+        <div class="slide-menu">
+            <ul class="dots" id="table-slide-menu">
+                <li class="dot active" onclick="showTable(0)"></li>
+                <li class="dot" onclick="showTable(1)"></li>
+                <li class="dot" onclick="showTable(2)"></li>
+                <li class="dot" onclick="showTable(3)"></li>
+            </ul>
+        </div>
+    
+        <div class="slide-content table-slide" style="display: block;">
+            <p class="caption" style="text-align: center;">Image classification results on CIFAR-10.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead class="center">
+                        <tr><th>Models</th><th>Acc.</th><th>Parameters</th><th>FLOPs</th></tr>
+                    </thead>
+                    <tbody class="center">
+                        <tr><td>KViT-T (Ours)</td><td><strong>93.81</strong></td><td>5,362,774</td><td><strong>0.25G</strong></td></tr>
+                        <tr><td>ViT-T</td><td>90.75</td><td>5,362,762</td><td>0.37G</td></tr>
+                        <tr><td>KViT-S (Ours)</td><td><strong>95.20</strong></td><td>21,342,358</td><td><strong>0.97G</strong></td></tr>
+                        <tr><td>ViT-S</td><td>93.33</td><td>21,342,346</td><td>1.43G</td></tr>
+                        <tr><td>KViT-B (Ours)</td><td><strong>95.35</strong></td><td>85,152,022</td><td><strong>3.77G</strong></td></tr>
+                        <tr><td>ViT-B</td><td>92.45</td><td>85,152,010</td><td>5.61G</td></tr>
+                        <tr><td>KViT-B (RoPE) (Ours)</td><td><strong>95.68</strong></td><td>85,152,022</td><td><strong>3.77G</strong></td></tr>
+                        <tr><td>ViT-B (RoPE)</td><td>94.10</td><td>85,152,010</td><td>5.61G</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    
+        <!-- 表格2 -->
+        <div class="slide-content table-slide" style="display: none;">
+            <p class="caption" style="text-align: center;">Image classification results on CIFAR-100.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead class="center">
+                        <tr><th>Models</th><th>Acc.</th><th>Parameters</th><th>FLOPs</th></tr>
+                    </thead>
+                    <tbody class="center">
+                        <tr><td>KViT-T (Ours)</td><td><strong>74.34</strong></td><td>5,380,144</td><td><strong>0.25G</strong></td></tr>
+                        <tr><td>ViT-T</td><td>66.07</td><td>5,380,132</td><td>0.37G</td></tr>
+                        <tr><td>KViT-S (Ours)</td><td><strong>71.74</strong></td><td>21,377,008</td><td><strong>0.97G</strong></td></tr>
+                        <tr><td>ViT-S</td><td>77.05</td><td>21,376,996</td><td>1.43G</td></tr>
+                        <tr><td>KViT-B (Ours)</td><td><strong>78.03</strong></td><td>85,221,232</td><td><strong>3.77G</strong></td></tr>
+                        <tr><td>ViT-B</td><td>72.28</td><td>85,221,220</td><td>5.61G</td></tr>
+                        <tr><td>KViT-B (RoPE) (Ours)</td><td><strong>79.65</strong></td><td>85,221,232</td><td><strong>3.77G</strong></td></tr>
+                        <tr><td>ViT-B (RoPE)</td><td>74.84</td><td>85,221,220</td><td>5.61G</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    
+        <!-- 表格3 -->
+        <div class="slide-content table-slide" style="display: none;">
+            <p class="caption" style="text-align: center;">Image classification results on ImageNet-1K.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead class="center">
+                        <tr><th>Models</th><th>Acc.</th><th>Parameters</th><th>FLOPs</th></tr>
+                    </thead>
+                    <tbody class="center">
+                        <tr><td>KViT-S-16 (Ours)</td><td><strong>76.39</strong></td><td>22,050,676</td><td><strong>3.22G</strong></td></tr>
+                        <tr><td>ViT-S-16</td><td>75.54</td><td>22,050,664</td><td>4.62G</td></tr>
+                        <tr><td>KViT-S-32 (Ours)</td><td><strong>72.04</strong></td><td>22,878,964</td><td><strong>0.79G</strong></td></tr>
+                        <tr><td>ViT-S-32</td><td>70.66</td><td>22,878,952</td><td>1.15G</td></tr>
+                        <tr><td>KViT-B-16 (Ours)</td><td><strong>76.75</strong></td><td>86,567,668</td><td><strong>12.03G</strong></td></tr>
+                        <tr><td>ViT-B-16</td><td>75.85</td><td>86,567,656</td><td>17.61G</td></tr>
+                        <tr><td>KViT-B-16 (RoPE) (Ours)</td><td><strong>78.61</strong></td><td>86,567,668</td><td><strong>12.03G</strong></td></tr>
+                        <tr><td>ViT-B-16 (RoPE)</td><td>78.40</td><td>86,567,656</td><td>17.62G</td></tr>
+                        <tr><td>KViT-B-32 (Ours)</td><td><strong>71.49</strong></td><td>88,224,244</td><td><strong>3.00G</strong></td></tr>
+                        <tr><td>ViT-B-32</td><td>69.90</td><td>88,224,232</td><td>4.42G</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="slide-content table-slide" style="display: none;">
+            <p class="caption" style="text-align: center;">Image generation results of KARMs on MNIST.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead class="center">
+                        <tr><th>Models</th><th>BPD</th><th>Images/sec</th><th>Time Complexity</th></tr>
+                    </thead>
+                    <tbody class="center">
+                        <tr><td>KARM (Ours)</td><td><strong>0.5652</strong></td><td>105.6037</td><td>$O(NWd)$</td></tr>
+                        <tr><td>LARM</td><td>0.5855</td><td>499.3672</td><td>$O(Nd^2)$</td></tr>
+                        <tr><td>ARM</td><td>0.5685</td><td>83.5772</td><td>$O(N^2d)$</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="caption" style="text-align: center;">Image generation results of KARMs on CIFAR-10.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead class="center">
+                        <tr><th>Models</th><th>BPD</th><th>Images/sec</th><th>Time Complexity</th></tr>
+                    </thead>
+                    <tbody class="center">
+                        <tr><td>KARM (Ours)</td><td><strong>3.0032</strong></td><td>4.5240</td><td>$O(NWd)$</td></tr>
+                        <tr><td>LARM</td><td>3.1836</td><td>14.4032</td><td>$O(Nd^2)$</td></tr>
+                        <tr><td>ARM</td><td>3.0224</td><td>1.8933</td><td>$O(N^2d)$</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+        <!-- ==============================================
+         6. Vision Transformers Heatmaps
+         ============================================== -->
+         <div class="container blog main">
+            <h1>Attention Heatmaps in ViTs</h1>
+            <br>
+            <img src="static/images/imagenet_heatmap_main.png" alt="Attention Heatmaps" style="width: 60%;">
+            <p class="caption" style="text-align: center;">
+                <strong>Krause Attention</strong> yields more diverse attention heads.
+            </p>
+            
+            <img src="static/images/attention_evolution_map.png" alt="Attention Evolution" style="width: 80%;">
+            <p class="caption" style="text-align: center;">
+                Evolution of attention scores across layers in KViTs/ViTs. <strong>Krause Attention</strong> (left) achieves stable multi-cluster formation, while standard attention (right) progressively converges to a single global consensus.
+            </p>
+        </div>
+
+        <!-- ==============================================
+        7. Image Generation
+        ============================================== -->
+        
+        <div class="container blog main">
+            <h1>Autoregressive Image Generation</h1>
+            
+            <div class="columns-2">
+                <div>
+                    <img src="static/images/completion_mnist.png" style="width: 100%;">
+                </div>
+                <div>
+                    <img src="static/images/completion_cifar10.png" style="width: 100%;">
+                </div>
+            </div>
+            
+            <p class="caption" style="text-align: center;">
+                Samples completed by Krause Autoregressive Models (KARMs) on <strong>MNIST</strong> (left) and <strong>CIFAR-10</strong> (right).
+            </p>
+        </div>
+    
+        <div class="container blog main">
+            <h1>Language Experimental Results</h1>
+        
+            <div class="slide-menu">
+                <ul class="dots" id="lang-slide-menu">
+                    <li class="dot active" onclick="showLangTable(0)"></li>
+                    <li class="dot" onclick="showLangTable(1)"></li>
+                </ul>
+            </div>
+        
+            <div class="slide-content lang-slide" style="display: block;">
+                <p class="caption" style="text-align: center;">Language understanding and reasoning results of Krause-Llama3-8B. Results are reported in Acc. (%) and Acc. / Macro-F1.</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead class="center" style="white-space: nowrap;">
+                            <tr><th>Models</th><th>BoolQ</th><th>CB</th><th>PIQA</th><th>MNLI</th><th>ANLI-R1</th><th>ANLI-R2</th><th>ANLI-R3</th><th>MMLU-Pro</th><th>IFEval</th></tr>
+                        </thead>
+                        <tbody class="center" style="white-space: nowrap;">
+                            <tr><td>Krause-Llama3-8B (Ours)</td><td><strong>80.59</strong></td><td><strong>64.29/48.04</strong></td><td><strong>77.77</strong></td><td><strong>63.27/53.72</strong></td><td><strong>40.30/33.01</strong></td><td><strong>40.50/34.27</strong></td><td><strong>45.67/39.84</strong></td><td><strong>41.67</strong></td><td><strong>34.01</strong></td></tr>
+                            <tr><td>Llama3-8B (finetuned w/ LoRA)</td><td>80.41</td><td>60.71/47.81</td><td>75.16</td><td>59.53/55.29</td><td>38.70/30.62</td><td>39.90/33.37</td><td>44.92/39.57</td><td><strong>41.67</strong></td><td>32.72</td></tr>
+                            <tr><td>Llama3-8B</td><td>76.13</td><td>41.07/19.41</td><td>51.52</td><td>35.45/18.11</td><td>33.40/16.69</td><td>33.40/16.69</td><td>33.50/17.04</td><td>37.50</td><td>22.18</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+            <div class="slide-content lang-slide" style="display: none;">
+                <p class="caption" style="text-align: center;">Zero-shot performance comparison on standard downstream benchmarks at the 100M and 200M parameter scales.</p>
+                <div class="columns-2" style="justify-content: center; align-items: flex-start;">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <p class="caption" style="text-align: center;">Benchmark results at the 100M parameter scale.</p>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead class="center" style="white-space: nowrap;">
+                                    <tr><th>Models</th><th>LAMBADA</th><th>CBT</th><th>PIQA</th><th>Blimp</th><th>Hellaswag</th><th>ARC-E</th></tr>
+                                </thead>
+                                <tbody class="center" style="white-space: nowrap;">
+                                    <tr><td>Krause (Ours)</td><td><strong>24.51</strong></td><td><strong>73.42</strong></td><td><strong>62.68</strong></td><td>76.76</td><td>27.78</td><td>48.04</td></tr>
+                                    <tr><td>Window</td><td><strong>24.51</strong></td><td>72.38</td><td>61.70</td><td>77.28</td><td>27.53</td><td>46.95</td></tr>
+                                    <tr><td>Standard</td><td>23.33</td><td>72.20</td><td>62.62</td><td>77.47</td><td>27.37</td><td>47.75</td></tr>
+                                    <tr><td>Top-$k$</td><td>22.80</td><td>71.24</td><td>61.81</td><td>75.66</td><td><strong>27.95</strong></td><td>48.04</td></tr>
+                                    <tr><td>Longformer</td><td>22.26</td><td>68.18</td><td>61.48</td><td>75.22</td><td>27.20</td><td>46.99</td></tr>
+                                    <tr><td>Routing</td><td>18.96</td><td>68.28</td><td>61.81</td><td><strong>78.73</strong></td><td>27.63</td><td><strong>49.09</strong></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <p class="caption" style="text-align: center;">Benchmark results at the 200M parameter scale.</p>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead class="center" style="white-space: nowrap;">
+                                    <tr><th>Models</th><th>LAMBADA</th><th>CBT</th><th>PIQA</th><th>Blimp</th><th>Hellaswag</th><th>ARC-E</th></tr>
+                                </thead>
+                                <tbody class="center" style="white-space: nowrap;">
+                                    <tr><td>Krause (Ours)</td><td><strong>30.60</strong></td><td><strong>80.14</strong></td><td><strong>65.07</strong></td><td>79.89</td><td>29.81</td><td>51.54</td></tr>
+                                    <tr><td>Window</td><td>30.45</td><td>78.19</td><td>64.25</td><td>79.95</td><td>29.81</td><td>52.38</td></tr>
+                                    <tr><td>Standard</td><td>29.67</td><td>77.91</td><td>64.80</td><td>80.22</td><td>29.71</td><td>52.13</td></tr>
+                                    <tr><td>Top-$k$</td><td>30.31</td><td>79.35</td><td>64.53</td><td>80.44</td><td><strong>30.06</strong></td><td>52.00</td></tr>
+                                    <tr><td>Longformer</td><td>28.29</td><td>76.22</td><td>63.60</td><td>79.11</td><td>29.43</td><td>52.21</td></tr>
+                                    <tr><td>Routing</td><td>18.84</td><td>70.78</td><td>63.87</td><td><strong>80.77</strong></td><td>29.45</td><td><strong>52.46</strong></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+
+    <!-- ==============================================
+         5. Attention Sinks in LLMs
+         ============================================== -->
+    <div class="container blog main">
+        <h1>Alleviating Attention Sinks</h1>
+        <br>
+        <img src="static/images/attention_sink_llama3.png" alt="Attention Sinks" style="width: 70%;">
+        <p class="caption" style="text-align: center;">
+            Layer dynamics of first-token attentions on <strong>Llama3-8B</strong>. Bounded-confidence interactions naturally moderate attention concentration.
+        </p>
+
+        <p class="text">
+            LLMs often suffer from the attention sink effect (Xiao et al., 2024), where the softmax normalization allocates disproportionately high attention scores on early tokens, regardless of their semantic relevance. This behavior introduces positional bias, reduces model expressivity, and weakens representation robustness.
+        </p>
+        <p class="text">
+            Krause Attention provides a complementary, bounded-confidence mechanism for mitigating this issue. By restricting attention to the local neighborhood, distant tokens can no longer allocate weight to the initial positions once they fall outside the receptive field. As shown in above figure, the base Llama model exhibits large oscillations and persistent peaks across layers, whereas Krause-LLMs produce remarkably more stable attention curves. This stabilization indicates that Krause Attention reduces reliance on fixed positional anchors and supports more robust representation learning.
+        </p>
+
+    </div>
+
+    <!-- ==============================================
+         8. BibTeX
+         ============================================== -->
+    <div class="container blog main" id="bibtex">
+        <h1>BibTeX</h1>
+        <p class="text">If you find our work useful, please consider citing our paper:</p>
+<pre><code class="plaintext">@article{liukrause2026,
+  title={Krause Synchronization Transformers},
+  author={Jingkun Liu and Yisong Yue and Max Welling and Yue Song},
+  journal={ICML},
+  year={2026},
+  url={https://arxiv.org/abs/2602.11534}
+}</code></pre>
+    </div>
+
+
+    <!-- ==============================================
+         9. Footer
+         ============================================== -->
+    <footer>
+        <div class="container">
+            <p style="font-family: 'Poppins', sans-serif;">
+                This website is built on the <a href="https://shikun.io/projects/clarity" target="_blank">Clarity Template</a>, originally designed by Shikun Liu, and incorporates elements from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.<br>
+                Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+        </div>    
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script>
+        function showTable(index) {
+            // 切换内容
+            const slides = document.querySelectorAll('.table-slide');
+            slides.forEach((el, i) => {
+                el.style.display = i === index ? 'block' : 'none';
+            });
+            // 切换红点高亮
+            const dots = document.querySelectorAll('#table-slide-menu .dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+    </script>
+
+    <script>
+    function showTable(index) {
+        const slides = document.querySelectorAll('.table-slide');
+        slides.forEach((el, i) => {
+            el.style.display = i === index ? 'block' : 'none';
+        });
+        const dots = document.querySelectorAll('#table-slide-menu .dot');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+    }
+
+    function showLangTable(index) {
+        const slides = document.querySelectorAll('.lang-slide');
+        slides.forEach((el, i) => {
+            el.style.display = i === index ? 'block' : 'none';
+        });
+        const dots = document.querySelectorAll('#lang-slide-menu .dot');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+    }
+    </script>
+
+</body>
+</html>

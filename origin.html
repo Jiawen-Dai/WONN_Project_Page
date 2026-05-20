@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Winfree Oscillatory Neural Networks</title>
+    <meta name="description" content="Winfree Oscillatory Neural Networks: synchronization-based oscillatory computation for image recognition and structured reasoning.">
+    <meta name="keywords" content="Winfree Oscillatory Neural Networks, synchronization, oscillatory neural networks, image recognition, reasoning, maze, Sudoku">
+    <meta name="author" content="Jiawen Dai and Yue Song">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Winfree Oscillatory Neural Networks">
+    <meta property="og:description" content="A synchronization-based oscillatory architecture for image recognition and structured reasoning.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="static/images/figure1.png">
+
+    <!-- Clarity Template CSS -->
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/foundation.min.css">
+    <link href="assets/fontawesome-free-7.2.0-web/css/all.min.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Navbar Script -->
+    <script src="assets/scripts/navbar.js"></script>
+
+    <!-- MathJax Configuration from Clarity -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            "HTML-CSS": {
+              scale: 95,
+              fonts: ["Gyre-Pagella"],
+              imageFont: null,
+              undefinedFamily: "'Arial Unicode MS', cmbright"
+            },
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+              }
+          });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        :root {
+            --wonn-blue: #2e6f9f;
+            --wonn-blue-dark: #17445e;
+            --wonn-blue-soft: #e8f2f8;
+            --wonn-gray: #F4F6F8;
+            --wonn-text: #222222;
+            --wonn-muted: #626a73;
+            --wonn-border: #dce3ea;
+        }
+        body, .text, .caption {
+            font-family: 'Charter', 'Bitstream Charter', 'Georgia', serif !important;
+            color: var(--wonn-text);
+        }
+        h1, h2, h3, h4, .title, .author, .abstract, .button, .conference, .pill, .metric-card, table {
+            font-family: 'Poppins', sans-serif !important;
+        }
+        .abstract { font-size: 1.08rem; color: #555; line-height: 1.72; max-width: 980px; }
+        .author { color: #333; }
+        .author a { color: #333; text-decoration: underline; text-decoration-color: #aaa; text-underline-offset: 3px; }
+        .author a:hover { color: #000; text-decoration-color: #000; }
+        .affiliation { font-family: 'Poppins', sans-serif; font-size: 0.95rem; color: #666; margin-top: 10px; line-height: 1.5; }
+        .title { letter-spacing: -0.02em; }
+        .hero-subtitle { font-family: 'Poppins', sans-serif; font-size: 1.22rem; color: #333; margin-top: 0.8rem; line-height: 1.55; }
+        .info .button { transition: transform .18s ease, box-shadow .18s ease; }
+        .info .button:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+        .pill-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 1.2rem; }
+        .pill { font-size: 0.83rem; color: var(--wonn-blue-dark); background: var(--wonn-blue-soft); border: 1px solid #d7e8f2; padding: 6px 11px; border-radius: 999px; }
+        .callout { background: linear-gradient(180deg, #ffffff, #f8fbfd); border: 1px solid var(--wonn-border); border-radius: 15px; padding: 1.1rem 1.25rem; margin: 1rem 0; }
+        .callout strong { color: var(--wonn-blue-dark); }
+        .metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 1.2rem 0 1.6rem; }
+        .metric-card { background: #fff; border: 1px solid var(--wonn-border); border-radius: 14px; padding: 1.1rem; box-shadow: 0 8px 24px rgba(0,0,0,0.035); }
+        .metric { display: block; color: var(--wonn-blue-dark); font-weight: 750; font-size: 1.4rem; margin-bottom: .25rem; }
+        .metric-label { color: #35404a; font-weight: 600; margin: 0 0 .35rem 0; font-size: .95rem; }
+        .metric-text { color: #606a75; font-size: .9rem; line-height: 1.5; margin: 0; }
+        .figure-center { display: block; margin-left: auto; margin-right: auto; }
+        .figure-60 { width: 60%; }
+        .figure-70 { width: 70%; }
+        .figure-80 { width: 80%; }
+        .figure-90 { width: 90%; }
+        .figure-100 { width: 100%; }
+        .caption { color: #555; font-size: .95rem; line-height: 1.55; margin-top: .65rem; }
+        .formula-box { background: #fbfcfd; border: 1px solid var(--wonn-border); border-radius: 12px; padding: 0.85rem 1rem; margin: 1rem auto; overflow-x: auto; }
+        table tbody strong { font-weight: 700; }
+        .table-wrapper { width: 100%; overflow-x: auto; margin-top: .8rem; }
+        table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+        th, td { padding: 8px 10px; white-space: nowrap; }
+        thead th { background: #f3f6f9; border-bottom: 1px solid #cfd9e2; }
+        tbody tr { border-bottom: 1px solid #e7edf2; }
+        tbody tr.wonn-row { background: #eef6fb; }
+        tbody tr.group-row td { background: #fafafa; color: #52606b; font-style: italic; text-align: left; font-weight: 600; }
+        .slide-menu { margin-bottom: 1rem; }
+        .dots { margin: 0; padding: 0; display: flex; justify-content: center; gap: 10px; list-style: none; }
+        .dot { width: 11px; height: 11px; border-radius: 50%; background: #c8d1da; cursor: pointer; transition: background .15s ease, transform .15s ease; }
+        .dot.active { background: var(--wonn-blue); transform: scale(1.18); }
+        .columns-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; align-items: start; }
+        .columns-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
+        .gif-card { background: #fff; border: 1px solid var(--wonn-border); border-radius: 14px; padding: .8rem; box-shadow: 0 8px 24px rgba(0,0,0,0.035); }
+        .gif-card img { border-radius: 10px; width: 100%; display: block; }
+        .small-note { font-size: .9rem; color: #66717c; line-height: 1.55; }
+        .codeblock { border-radius: 10px; overflow: hidden; }
+        footer a { color: var(--wonn-blue-dark); }
+        @media (max-width: 900px) {
+            .figure-60, .figure-70, .figure-80, .figure-90 { width: 100%; }
+            .metric-grid, .columns-2, .columns-3 { grid-template-columns: 1fr; }
+            th, td { font-size: .78rem; padding: 7px 8px; }
+            .title { font-size: 2.0rem !important; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ==============================================
+         1. Paper Header
+         ============================================== -->
+    <div class="container blog" id="first-content" style="background-color: #F4F6F8; padding-top: 5rem; padding-bottom: 5rem;">
+        <div class="blog-title no-cover" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; margin: 0 auto;">
+            <div style="width: 100%; max-width: 980px; display: flex; flex-direction: column; align-items: center;">
+                <h1 class="title" style="text-align: center; margin-bottom: 0.5rem;">Winfree Oscillatory Neural Networks</h1>
+                <p class="hero-subtitle">
+                    A synchronization-based oscillatory architecture for image recognition and structured reasoning.
+                </p>
+
+                <!-- Double-blind safe by default. Replace after de-anonymization if needed. -->
+                <p class="author" style="margin-top: 1.5rem; font-size: 1.25rem; text-align: center;">
+                    <strong>Anonymous Authors</strong>
+                </p>
+
+                <p class="affiliation" style="text-align: center; margin-top: 1rem;">
+                    NeurIPS 2026 Submission
+                </p>
+
+                <!-- Optional non-anonymous version: uncomment after release.
+                <p class="author" style="margin-top: 1.5rem; font-size: 1.25rem; text-align: center;">
+                    <a href="#" target="_blank">Jiawen Dai</a><sup>1</sup>,
+                    <a href="#" target="_blank">Collaborator Name</a><sup>2</sup>
+                </p>
+                <p class="affiliation" style="text-align: center; margin-top: 1rem;">
+                    <sup>1</sup>Shanghai Jiao Tong University &nbsp; &nbsp; <sup>2</sup>Institution
+                </p>
+                -->
+
+                <p class="conference" style="text-align: center; margin-top: 1.5rem; font-weight: 600; font-size: 1.15rem; color: #333; letter-spacing: 0.5px;">
+                    <i class="fa-solid fa-wave-square" style="color: #666; margin-right: 6px;"></i> Synchronization-based Oscillatory Neural Computation
+                </p>
+
+                <p class="abstract" style="text-align: left; margin-top: 1.4rem;">
+                    Oscillations and synchronization are ubiquitous mechanisms for organizing collective dynamics in biological and physical systems. We introduce <strong>Winfree Oscillatory Neural Networks (WONN)</strong>, a neural architecture built on generalized Winfree synchronization dynamics. WONN represents neural states as phase oscillators evolving on the toroidal phase space $(S^1)^d$, and uses recurrent Winfree updates to self-organize oscillators into structured collective states.
+                </p>
+                <p class="abstract" style="text-align: left; margin-top: .65rem;">
+                    Across image recognition and structured reasoning tasks, WONN provides a scalable and parameter-efficient alternative to conventional feed-forward and transformer-style architectures. It scales synchronization-based oscillatory computation to ImageNet-1K, achieves strong CIFAR/ImageNet performance with substantially fewer parameters, and reaches <strong>80.1% Maze-hard accuracy with only 0.396M parameters</strong> using energy voting.
+                </p>
+
+                <div class="pill-row">
+                    <span class="pill">Toroidal phase space $(S^1)^d$</span>
+                    <span class="pill">Generalized Winfree dynamics</span>
+                    <span class="pill">Grouped synchronization</span>
+                    <span class="pill">Energy voting</span>
+                    <span class="pill">ImageNet-1K + reasoning</span>
+                </div>
+            </div>
+
+            <div class="info" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 2.5rem; width: 100%;">
+                <a href="#" class="button icon" style="background-color: rgba(0, 0, 0, 0.05); color: #000; border: 1px solid #ddd; margin: 0;">
+                    Paper Coming Soon <i class="fa-solid fa-file-pdf"></i>
+                </a>
+                <a href="#" class="button icon" style="background-color: rgba(0, 0, 0, 0.05); color: #000; border: 1px solid #ddd; margin: 0;">
+                    Code Coming Soon <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="#results" class="button icon" style="background-color: rgba(0, 0, 0, 0.05); color: #000; border: 1px solid #ddd; margin: 0;">
+                    Results <i class="fa-solid fa-table"></i>
+                </a>
+                <a href="#bibtex" class="button icon" style="background-color: rgba(0, 0, 0, 0.05); color: #000; border: 1px solid #ddd; margin: 0;">
+                    BibTeX <i class="fa-solid fa-quote-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==============================================
+         2. Teaser Section
+         ============================================== -->
+    <div class="container blog main first" id="blog-main" style="padding-top: 3rem;">
+        <img src="static/images/figure1.png" alt="WONN teaser" class="figure-center figure-80">
+        <p class="caption" style="text-align: center;">
+            <strong>Winfree Oscillatory Neural Networks.</strong> WONN evolves neural representations on the toroidal phase space $(S^1)^d$. Through generalized Winfree synchronization dynamics, oscillators self-organize into structured collective states for both visual perception and reasoning tasks.
+        </p>
+    </div>
+
+
+    <!-- ==============================================
+         3. Introduction
+         ============================================== -->
+    <div class="container blog main">
+        <h1>Introduction</h1>
+        <p class="text">
+            Standard neural networks are often described as a sequence of static feature transformations. WONN takes a different view: computation is the collective evolution of interacting dynamical states. Each scalar oscillator carries a phase variable on the circle, and a population of such oscillators evolves on a high-dimensional torus. The model repeatedly updates these phases through Winfree-type interactions, allowing representations to synchronize, separate into phase groups, and refine toward task-relevant collective configurations.
+        </p>
+
+        <p class="text">
+            Unlike Kuramoto-type models, whose interaction is primarily governed by pairwise phase differences, Winfree dynamics decompose interaction into a <strong>receiver sensitivity</strong> $S(\theta_i)$ and a <strong>sender influence</strong> $I(\theta_j)$. This sensitivity-influence structure gives WONN a more expressive interaction mechanism: it can break global phase-shift symmetry, use either fixed trigonometric or learnable interaction functions, and support local, global, or grouped coupling mechanisms.
+        </p>
+
+        <div class="metric-grid">
+            <div class="metric-card">
+                <span class="metric">95.26%</span>
+                <p class="metric-label">CIFAR-10 accuracy</p>
+                <p class="metric-text">Best WONN result in the trigonometric setting, using 11.84M parameters.</p>
+            </div>
+            <div class="metric-card">
+                <span class="metric">76.78%</span>
+                <p class="metric-label">ImageNet-1K accuracy</p>
+                <p class="metric-text">Large-scale image classification with 12.28M parameters.</p>
+            </div>
+            <div class="metric-card">
+                <span class="metric">80.1%</span>
+                <p class="metric-label">Maze-hard accuracy</p>
+                <p class="metric-text">Energy voting with only 0.396M parameters.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==============================================
+         4. Winfree Dynamics Mechanism
+         ============================================== -->
+    <div class="container blog main">
+        <h1>Winfree Oscillatory Mechanism</h1>
+        <div class="columns-2">
+            <div>
+                <img src="static/images/oscillatory_neuron.png" alt="Winfree oscillatory neuron" style="width: 100%;">
+            </div>
+            <div>
+                <img src="static/images/grouped_si.png" alt="Grouped sensitivity and influence" style="width: 100%;">
+            </div>
+        </div>
+        <p class="caption" style="text-align: center;">
+            <strong>Left:</strong> A Winfree oscillatory neuron with phase $\theta$, natural frequency $\omega$, sensitivity $S(\theta)$, and influence $I(\theta)$. <strong>Right:</strong> Grouped sensitivity-influence mechanism for hierarchical local synchronization.
+        </p>
+
+        <p class="text">
+            Let $\theta_i$ denote the phase of oscillator $i$, $\omega_i$ its natural frequency, $S(\theta_i)$ the receiver-side sensitivity, $I(\theta_j)$ the sender-side influence, and $c_{ij}$ the coupling weight from oscillator $j$ to oscillator $i$. The continuous-time Winfree form is
+        </p>
+
+        <div class="formula-box">
+            $$\dot{\theta}_i = \omega_i + S(\theta_i)\sum_j c_{ij} I(\theta_j).$$
+        </div>
+
+        <p class="text">
+            WONN discretizes this update and embeds it into neural layers. Each Winfree dynamics layer performs $T$ recurrent phase updates with shared parameters, followed by a layer-transition module that updates both the phase state $\Theta$ and the natural-frequency state $\Omega$.
+        </p>
+    </div>
+
+
+    <!-- ==============================================
+         5. Network Architecture
+         ============================================== -->
+    <div class="container blog main">
+        <h1>Network with WONN</h1>
+        <img src="static/images/net.png" alt="WONN network architecture" class="figure-center figure-80">
+        <p class="caption" style="text-align: center;">
+            Overview of the WONN architecture. Inputs are encoded into an initial frequency state, while phases are initialized on the circle. Stacked Winfree dynamics layers iteratively synchronize the phase representation before producing the final prediction.
+        </p>
+
+        <div class="callout">
+            <strong>Architecture intuition.</strong> Within a layer, recurrent Winfree updates perform fast oscillatory refinement. Across layers, transition modules update the slow feature state, enabling hierarchical computation. The resulting architecture combines geometric phase dynamics with neural coupling operators such as attention or convolution.
+        </div>
+    </div>
+
+
+    <!-- ==============================================
+         6. Experimental Results
+         ============================================== -->
+    <div class="container blog main" id="results">
+        <h1>Experimental Results</h1>
+
+        <div class="slide-menu">
+            <ul class="dots" id="table-slide-menu">
+                <li class="dot active" onclick="showTable(0)" title="CIFAR"></li>
+                <li class="dot" onclick="showTable(1)" title="ImageNet"></li>
+                <li class="dot" onclick="showTable(2)" title="Maze-hard"></li>
+                <li class="dot" onclick="showTable(3)" title="Sudoku"></li>
+            </ul>
+        </div>
+
+        <div class="slide-content table-slide" style="display: block;">
+            <p class="caption" style="text-align: center;">Image classification results on <strong>CIFAR-10/100</strong>. ViT models marked with $\dagger$ are trained with additional regularization; other models follow a plain training protocol.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead class="center">
+                        <tr><th>Models</th><th>CIFAR-10 Acc.</th><th>CIFAR-10 Params</th><th>CIFAR-100 Acc.</th><th>CIFAR-100 Params</th></tr>
+                    </thead>
+                    <tbody class="center">
+                        <tr><td>ResNet-18</td><td>93.48 ± 0.16</td><td>11.17M</td><td>70.53 ± 0.10</td><td>11.22M</td></tr>
+                        <tr><td>ResNet-50</td><td>94.22 ± 0.14</td><td>23.52M</td><td>73.54 ± 0.41</td><td>23.71M</td></tr>
+                        <tr><td>ViT-T<sup>†</sup></td><td>90.34 ± 0.18</td><td>5.36M</td><td>67.59 ± 0.44</td><td>5.38M</td></tr>
+                        <tr><td>ViT-S<sup>†</sup></td><td>93.43 ± 0.29</td><td>21.34M</td><td>71.18 ± 0.62</td><td>21.38M</td></tr>
+                        <tr><td>ViT-B<sup>†</sup></td><td>92.04 ± 0.25</td><td>85.15M</td><td>71.05 ± 0.40</td><td>85.22M</td></tr>
+                        <tr><td><em>AKOrN</em><sup>attn</sup></td><td>93.66 ± 0.17</td><td>4.60M</td><td>72.03 ± 0.34</td><td>4.62M</td></tr>
+                        <tr class="group-row"><td colspan="5">$S(\theta_i)$ and $I(\theta_i)$ as MLPs</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=128→128)</td><td>94.55 ± 0.09</td><td>3.08M</td><td>73.77 ± 0.40</td><td>3.09M</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=64→256)</td><td>95.12 ± 0.04</td><td>7.54M</td><td>75.12 ± 0.49</td><td>7.56M</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=256→256)</td><td><strong>95.24 ± 0.12</strong></td><td>12.02M</td><td><strong>76.20 ± 0.45</strong></td><td>12.04M</td></tr>
+                        <tr class="group-row"><td colspan="5">$S(\theta_i)$ and $I(\theta_i)$ as trigonometric functions</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=128→128)</td><td>94.50 ± 0.15</td><td>2.98M</td><td>74.48 ± 0.16</td><td>3.00M</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=64→256)</td><td>95.08 ± 0.07</td><td>7.40M</td><td>75.81 ± 0.33</td><td>7.43M</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=256→256)</td><td><strong>95.26 ± 0.05</strong></td><td>11.84M</td><td><strong>76.17 ± 0.52</strong></td><td>11.86M</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="slide-content table-slide" style="display: none;">
+            <p class="caption" style="text-align: center;">Image classification results on <strong>ImageNet-100</strong> and <strong>ImageNet-1K</strong>.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead class="center">
+                        <tr><th>Models</th><th>ImageNet-100 Acc.</th><th>ImageNet-100 Params</th><th>ImageNet-1K Acc.</th><th>ImageNet-1K Params</th></tr>
+                    </thead>
+                    <tbody class="center">
+                        <tr><td>ResNet-18</td><td>78.20</td><td>11.23M</td><td>69.73</td><td>11.69M</td></tr>
+                        <tr><td>ResNet-50</td><td>81.18</td><td>23.71M</td><td><strong>76.89</strong></td><td>25.56M</td></tr>
+                        <tr><td>ViT-S-16<sup>†</sup></td><td>77.96</td><td>21.70M</td><td>75.54</td><td>22.05M</td></tr>
+                        <tr><td>ViT-B-16<sup>†</sup></td><td>76.36</td><td>85.87M</td><td>75.85</td><td>86.57M</td></tr>
+                        <tr><td><em>AKOrN</em><sup>attn</sup></td><td>80.08</td><td>4.62M</td><td>67.45</td><td>4.85M</td></tr>
+                        <tr class="group-row"><td colspan="5">$S(\theta_i)$ and $I(\theta_i)$ as MLPs</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=128→128)</td><td>81.50</td><td>3.09M</td><td>--</td><td>--</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=64→256)</td><td>82.04</td><td>7.56M</td><td>74.84</td><td>7.79M</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=256→256)</td><td><strong>82.88</strong></td><td>12.05M</td><td><strong>76.78</strong></td><td>12.28M</td></tr>
+                        <tr class="group-row"><td colspan="5">$S(\theta_i)$ and $I(\theta_i)$ as trigonometric functions</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=128→128)</td><td>81.76</td><td>3.00M</td><td>--</td><td>--</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=64→256)</td><td><strong>82.56</strong></td><td>7.43M</td><td>--</td><td>--</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Ch=256→256)</td><td>82.22</td><td>11.87M</td><td>--</td><td>--</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="slide-content table-slide" style="display: none;">
+            <p class="caption" style="text-align: center;">Maze-hard pathfinding results. <em>Energy Voting</em> selects the solution with the lowest energy among 32 independently sampled trajectories.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead class="center"><tr><th>Models</th><th>Accuracy (%)</th><th>Parameters</th></tr></thead>
+                    <tbody class="center">
+                        <tr class="group-row"><td colspan="3">LLMs</td></tr>
+                        <tr><td>DeepSeek R1</td><td>0.0</td><td>671B</td></tr>
+                        <tr><td>Claude 3.7 8K</td><td>0.0</td><td>?</td></tr>
+                        <tr><td>O3-mini-high</td><td>0.0</td><td>?</td></tr>
+                        <tr class="group-row"><td colspan="3">Recurrent models</td></tr>
+                        <tr><td>HRM</td><td>74.5</td><td>27M</td></tr>
+                        <tr><td>TRM-Att (dihedral augmented)</td><td><strong>85.3</strong></td><td>7M</td></tr>
+                        <tr><td>TRM-MLP (dihedral augmented)</td><td>0.0</td><td>19M</td></tr>
+                        <tr class="group-row"><td colspan="3">Other synchrony-based model</td></tr>
+                        <tr><td><em>AKOrN</em><sup>attn</sup></td><td>36.2</td><td>1M</td></tr>
+                        <tr class="group-row"><td colspan="3">$S(\theta_i)$ and $I(\theta_i)$ as trigonometric functions</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong></td><td><strong>76.2</strong></td><td><strong>0.396M</strong></td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (Energy Voting)</td><td><strong>80.1</strong></td><td><strong>0.396M</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="slide-content table-slide" style="display: none;">
+            <p class="caption" style="text-align: center;">Sudoku solving results. WONN follows the standard setting and reports average results over five runs.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead class="center"><tr><th>Models</th><th>Accuracy (%)</th><th>Parameters</th></tr></thead>
+                    <tbody class="center">
+                        <tr><td>SAT-Net</td><td>98.3</td><td>0.618M</td></tr>
+                        <tr><td>RRN</td><td>99.8</td><td>0.201M</td></tr>
+                        <tr><td>R-Transformer</td><td><strong>100.0</strong></td><td>0.211M</td></tr>
+                        <tr><td>Transformer</td><td>98.6 ± 0.3</td><td>16.87M</td></tr>
+                        <tr><td><em>HRM</em></td><td>99.7 ± 0.2</td><td>27.28M</td></tr>
+                        <tr><td><em>AKOrN</em><sup>attn</sup> (T=16)</td><td>99.8 ± 0.1</td><td>2.98M</td></tr>
+                        <tr class="group-row"><td colspan="3">$S(\theta_i)$ and $I(\theta_i)$ as trigonometric functions</td></tr>
+                        <tr class="wonn-row"><td><strong>WONN</strong> (T=16)</td><td><strong>100.0 ± 0.0</strong></td><td>1.58M</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==============================================
+         7. Image Recognition Dynamics
+         ============================================== -->
+    <div class="container blog main">
+        <h1>Layer Dynamics in Image Recognition</h1>
+        <img src="static/images/two_peak.png" alt="Two-peak phase structure" class="figure-center figure-90">
+        <p class="caption" style="text-align: center;">
+            Final phase distribution in WONN on image recognition tasks. The phase variables exhibit a characteristic bimodal distribution, with two dominant peaks approximately separated by $\pi$. Weighted activation maps show that the two modes capture complementary object structures.
+        </p>
+
+        <div class="columns-2" style="margin-top: 1.5rem;">
+            <div class="gif-card">
+                <img src="static/images/image_peak1_layer_dynamics.gif" alt="Layer dynamics for phase peak 1">
+                <p class="caption" style="text-align: center;">Layer dynamics for the first synchronized phase peak.</p>
+            </div>
+            <div class="gif-card">
+                <img src="static/images/image_peak2_layer_dynamics.gif" alt="Layer dynamics for phase peak 2">
+                <p class="caption" style="text-align: center;">Layer dynamics for the second synchronized phase peak.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==============================================
+         8. Maze-hard Dynamics
+         ============================================== -->
+    <div class="container blog main">
+        <h1>Maze-hard Synchronous Path Formation</h1>
+        <p class="text">
+            WONN does not construct a path greedily. In the early stage, the model produces multiple diffuse candidate fragments. As the recurrent dynamics evolve, compatible fragments reinforce one another, inconsistent branches are suppressed, and a coherent path emerges from start to goal.
+        </p>
+
+        <div class="columns-3">
+            <div class="gif-card">
+                <img src="static/images/maze_wonn_1_prob.gif" alt="WONN maze probability dynamics example 1">
+                <p class="caption" style="text-align: center;">Example 1: probability dynamics.</p>
+            </div>
+            <div class="gif-card">
+                <img src="static/images/maze_wonn_24_prob.gif" alt="WONN maze probability dynamics example 2">
+                <p class="caption" style="text-align: center;">Example 2: branch suppression.</p>
+            </div>
+            <div class="gif-card">
+                <img src="static/images/maze_wonn_25_prob.gif" alt="WONN maze probability dynamics example 3">
+                <p class="caption" style="text-align: center;">Example 3: coherent path emergence.</p>
+            </div>
+        </div>
+
+        <img src="static/images/maze_prob.png" alt="Maze probability static panel" class="figure-center figure-100" style="margin-top: 1.5rem;">
+        <p class="caption" style="text-align: center;">
+            Static probability panels from Maze-hard. Each panel shows the predicted per-cell path probability at a recurrent step.
+        </p>
+    </div>
+
+
+    <!-- ==============================================
+         9. Energy and Reasoning Observations
+         ============================================== -->
+    <div class="container blog main">
+        <h1>Energy as a Test-time Selection Signal</h1>
+        <img src="static/images/maze_energy.png" alt="Maze energy curve" class="figure-center figure-70">
+        <p class="caption" style="text-align: center;">
+            Energy behavior on Maze-hard. The interaction energy is not assumed to be a global Lyapunov function for the full neural architecture; instead, it provides a useful diagnostic and a practical test-time selection criterion.
+        </p>
+
+        <p class="text">
+            For the trigonometric Winfree core under suitable symmetry assumptions, the interaction term admits an energy structure. In Maze-hard, sampling 32 independent trajectories and selecting the lowest-energy final state improves accuracy from 76.2% to 80.1%. This suggests that the dynamical state carries useful internal confidence information beyond the raw prediction.
+        </p>
+    </div>
+
+
+    <!-- ==============================================
+         10. BibTeX
+         ============================================== -->
+    <div class="container blog main" id="bibtex">
+        <h1>BibTeX</h1>
+        <p class="text">Replace this BibTeX after the paper is public.</p>
+<pre class="codeblock"><code class="plaintext">@article{wonn2026,
+  title   = {Winfree Oscillatory Neural Networks},
+  author  = {Anonymous Authors},
+  journal = {NeurIPS Submission},
+  year    = {2026}
+}</code></pre>
+    </div>
+
+
+    <!-- ==============================================
+         11. Footer
+         ============================================== -->
+    <footer>
+        <div class="container">
+            <p style="font-family: 'Poppins', sans-serif;">
+                This website is built on the <a href="https://shikun.io/projects/clarity" target="_blank">Clarity Template</a>, originally designed by Shikun Liu, and uses a research project-page layout adapted for WONN.<br>
+                Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script>
+        function showTable(index) {
+            const slides = document.querySelectorAll('.table-slide');
+            slides.forEach((el, i) => {
+                el.style.display = i === index ? 'block' : 'none';
+            });
+            const dots = document.querySelectorAll('#table-slide-menu .dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+    </script>
+
+</body>
+</html>
