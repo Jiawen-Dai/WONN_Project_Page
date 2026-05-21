@@ -1,85 +1,82 @@
-# Clarity Template
+# Winfree Oscillatory Neural Network Project Page
 
-Clarity is an open-source, minimalist website template designed specifically for presenting AI research. It features a modular and clean design that is easy to customise for creating simple, project-based websites. With Clarity, you can effectively showcase your work, ensuring your research stands out in a visually appealing and professional manner. 
+This repository hosts the project page for **Winfree Oscillatory Neural Network (WONN)**.
 
-## Design Showcase
+WONN is a dynamical neural architecture based on generalized Winfree synchronization dynamics. It represents neural states as phase variables on the toroidal phase space \((S^1)^d\), and evolves them through structured oscillatory interactions for image recognition and reasoning tasks.
 
-- Clarity Light Theme with Project Cover:
-```css
-<div class="container blog" id="first-content" style="background-color: #E0E4E6;">
-    <div class="blog-title">
+**Project page:** <https://jiawen-dai.github.io/WONN_Project_Page/>  
+**Code:** <https://github.com/Jiawen-Dai/WONN>
+
+> This repository contains only the static website. The model implementation and training scripts are maintained in the code repository above.
+
+## Contents
+
+The page provides a compact overview of the paper, including:
+
+- the connection from classical Winfree dynamics to WONN;
+- the WONN architecture and its hierarchical sensitivity--influence interaction mechanism;
+- image classification results on CIFAR and ImageNet;
+- reasoning results on Maze-hard and Sudoku;
+- qualitative visualizations of Maze-hard path formation, phase-mode dynamics, and interaction-energy diagnostics.
+
+## Repository Structure
+
+```text
+.
+├── index.html              # Main project page
+├── static/images/          # Figures, tables, GIFs, and visualizations used by the page
+├── assets/                 # Template styles, scripts, fonts, and other static assets
+├── clarity/                # Clarity template CSS/JS files
+├── clarity.html            # Original/reference Clarity template page
+├── LICENSE
+└── README.md
 ```
-<img class="foreground" src="assets/figures/clarity_light.png">
 
-- Clarity Dark Theme with Project Cover:
-```css
-<div class="container blog" id="first-content" style="background-color: #304463;">
-    <div class="blog-title white">
+The page is static and can be hosted directly with GitHub Pages.
+
+## Local Preview
+
+Open `index.html` directly in a browser, or serve the directory locally:
+
+```bash
+python3 -m http.server 8000
 ```
-<img class="foreground" src="assets/figures/clarity_dark.png">
 
-- Clarity Light Theme without Project Cover:
-```css
-<div class="container blog" id="first-content" style="background-color: #304463;">
-    <div class="blog-title no-cover">
+Then visit:
+
+```text
+http://localhost:8000
 ```
-<img class="foreground" src="assets/figures/clarity_light_no_cover.png">
 
-- Clarity Dark Theme without Project Cover:
-```css
-<div class="container blog" id="first-content" style="background-color: #E0E4E6;">
-    <div class="blog-title white no-cover">
+## Updating the Page
+
+Most content edits should be made in `index.html`.
+
+Common updates include:
+
+- updating the paper link in the `Paper` button;
+- updating the code link in the `Code` button;
+- replacing or adding figures under `static/images/`;
+- updating experimental tables;
+- updating the BibTeX entry in the `#bibtex` section.
+
+The current page uses MathJax for equations and local static images for the main visual assets.
+
+## Deployment Notes
+
+For GitHub Pages, keep `.nojekyll` in the root directory so that static files and folders are served without Jekyll processing.
+
+Before committing, remove local macOS metadata files if they appear:
+
+```bash
+find . -name ".DS_Store" -delete
+rm -rf __MACOSX
 ```
-<img class="foreground" src="assets/figures/clarity_dark_no_cover.png">
 
-- Clarity Gradient Theme without Project Cover:
-```css
-<div class="container blog" id="first-content" style="background: linear-gradient(90deg, hsla(298, 68%, 90%, 1) 0%, hsla(30, 82%, 91%, 1) 100%);">
-    <div class="blog-title no-cover">
-```
-<img class="foreground" src="assets/figures/clarity_gradient_no_cover.png">
+## Acknowledgements
 
-*Note: The design showcase uses the licensed font option along with the complete FontAwesome Pro icon set.*
-
-
-## Update
-- **Mar 13, 2026**: Feature update on `copy button` included in all code blocks.
-<p align="center">
-  <img src="assets/figures/copy.gif"/>
-</p>
-
-- **Jan. 12, 2025**: Feature update with `navbar` design for hoverable table of content (thanks [@yongyizang](https://github.com/yongyizang) for his generous contribution). Please comment out or in `<script src="assets/scripts/navbar.js"></script>` to activate or deactivate this feature.
-<p align="center">
-  <img src="assets/figures/toc_web.gif"/>
-  <img src="assets/figures/toc_phone.gif"/>
-</p>
-
-- **Oct. 28, 2024**: Feature update with `slideshow` design for automated slideshow display. For detailed usage and instructions, please refer to the `clarity.html` file.
-
-<p align="center">
-  <img src="assets/figures/slide_show.gif"/>
-</p>
-
-- **Oct. 24, 2024**: Feature update with `no-cover` design for title page design layout. For anyone prefer a title page design without a project cover, change `<div class="blog-title">` into `<div class="blog-title no-cover">`.
-- **Aug. 26, 2024**: Feature update with comparison display / [46ec3ee](https://github.com/lorenmt/clarity-template/commit/46ec3eee19ea86775982e3c93c5b35716bad2d09) suggested in  [Issue #1](https://github.com/lorenmt/clarity-template/issues/1#issue-2485070942).
-
-<p align="center">
-  <img src="assets/figures/comparison.gif"/>
-</p>
-
-## Usage
-Please follow the visual guidelines outlined in the [Clarity blog post](https://shikun.io/projects/clarity) or the `clarity.html` file to optimise visual layouts and design. Additionally, a minimalist example template, `minimal.html`, is provided to help you get started quickly.
-
-Clarity offers two font options: 
-1. [Charter](https://practicaltypography.com/charter.html) + [Poppins](https://fonts.google.com/specimen/Poppins): free fonts available for commercial use. 
-2.  [Tiempos Text](https://klim.co.nz/retail-fonts/tiempos-text/) + [Athletics](https://familytype.co/#athletics): licensed fonts with the trial license available for non-commercial use.
-
-By default, the template uses the free fonts. To switch to the licensed fonts, follow these steps: 
-1. Download the trial license or purchase the full license and place the font files in the  `assets/fonts` directory.
-2. Optionally, use a [web font converter](https://transfonter.org/) to ensure compatibility across different browsers.
-3. Update the font-size and default font options in `assets/stylesheets/_master.scss` (just comment in and out). 
-4. Change the corresponding CSS file path to `assets/stylesheets/main.css` in your project HTML file. 
-5. To further improve the visual aesthetics, please consider purchasing the  [FontAwesome Pro](https://fontawesome.com/plans) for a complete icon set, and update `<link href="assets/fontawesome-free-6.6.0-web/css/all.min.css" rel="stylesheet">` with `<link href="assets/fontawesome-pro-6.6.0-web/css/all.min.css" rel="stylesheet">` in the `<head>` tag.
+This website is built on the [Clarity Template](https://shikun.io/projects/clarity), originally designed by Shikun Liu, and incorporates elements from the [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template).
 
 ## License
-This project follows  <a href="https://creativecommons.org/licenses/by-sa/4.0/"><b>Creative Commons Attribution-ShareAlike 4.0 International License</b></a>. This allows you to freely modify and distribute the template in any way you like. In return, I kindly ask that you link back to the [Clarity blog post](https://shikun.io/projects/clarity) in the footer to acknowledge my work and efforts. Enjoy!
+
+The template-derived website code follows the Creative Commons Attribution-ShareAlike 4.0 International License. Please keep the footer attribution when reusing or adapting the page.
