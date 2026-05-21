@@ -446,15 +446,15 @@
 
         table th,
         table td {
-            padding: 0.55rem 0.70rem;
-            border-bottom: 1px solid #e5e5e5;
+            padding: 0.50rem 0.70rem;
+            border-bottom: 1px solid #eeeeee;
             vertical-align: middle;
         }
 
         table th {
             font-weight: 600;
             color: var(--body-text);
-            background: #fafafa;
+            background: #f5f5f5;
         }
 
         table td {
@@ -507,7 +507,9 @@
         .result-table th {
             white-space: nowrap;
             color: #222222;
-            background: #f4f4f4;
+            border-top: 1.5px solid #222222;
+            border-bottom: 1px solid #999999;
+            background: #f7f7f7;
         }
 
         .result-table td:first-child,
@@ -524,7 +526,7 @@
         .result-table .row-group td {
             padding-top: 0.76rem;
             padding-bottom: 0.32rem;
-            border-top: 1px solid #333333;
+            border-top: 1.5px solid #333333;
             border-bottom: 0;
             color: #111111;
             font-family: "Times New Roman", Times, serif !important;
@@ -546,14 +548,35 @@
             font-size: 100% !important;
         }
 
+        .result-table tbody tr,
+        .result-table tbody tr:nth-child(2n+1) {
+            background-color: #ffffff !important;
+        }
+
+        .result-table tbody td {
+            background: #ffffff !important;
+            font-weight: 400;
+        }
+
         .result-table .ours td {
-            background: #fafafa;
+            background: #ffffff !important;
         }
 
         .result-table .best td {
             color: #111111;
-            font-weight: 600;
-            background: #f1f1f1;
+            font-weight: 400;
+        }
+
+        .result-table .highlight td:first-child {
+            font-weight: 400;
+        }
+
+        .result-table .best td strong {
+            font-weight: 700;
+        }
+
+        .result-table .highlight td {
+            background: #e2e2e2 !important;
         }
 
         .result-summary {
@@ -563,6 +586,14 @@
             font-size: 0.86rem;
             line-height: 1.55;
             text-align: center;
+        }
+
+        .result-summary.peak-dynamics-caption {
+            text-align: left;
+        }
+
+        .result-summary.maze-path-caption {
+            text-align: left;
         }
 
         .analysis-gif-grid {
@@ -588,6 +619,92 @@
             margin: 0.45rem 0 0 0;
             font-size: 0.80rem;
             text-align: center;
+        }
+
+        .peak-dynamics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.05rem;
+            align-items: start;
+            margin-top: 1.05rem;
+        }
+
+        .peak-dynamics-item {
+            text-align: center;
+        }
+
+        .peak-dynamics-item img {
+            display: block;
+            width: 100%;
+            border: 1px solid #e0e0e0;
+            background: #ffffff;
+        }
+
+        .peak-dynamics-item .body-caption {
+            margin: 0.45rem 0 0 0;
+            font-size: 0.80rem;
+            text-align: center;
+        }
+
+        .maze-hrm-comparison {
+            display: grid;
+            grid-template-columns: minmax(260px, 0.78fr) minmax(320px, 1fr);
+            gap: 1.35rem;
+            align-items: center;
+            max-width: var(--text-width);
+            margin: 1.20rem auto 0 auto;
+            padding: 1.00rem 0;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .maze-hrm-figure {
+            margin: 0;
+            text-align: center;
+        }
+
+        .maze-hrm-figure img {
+            display: block;
+            width: min(100%, 360px);
+            margin: 0 auto;
+            border: 1px solid #e0e0e0;
+            background: #ffffff;
+        }
+
+        .maze-hrm-figure .body-caption {
+            margin: 0.45rem 0 0 0;
+            font-size: 0.80rem;
+            text-align: center;
+        }
+
+        .maze-hrm-text {
+            color: var(--body-text);
+            font-size: 0.86rem;
+            line-height: 1.55;
+        }
+
+        .maze-hrm-title {
+            margin: 0 0 0.35rem 0;
+            color: var(--body-text);
+            padding: 0;
+            font-size: 0.98rem !important;
+            font-weight: 600;
+            line-height: 1.32;
+        }
+
+        .maze-hrm-text p {
+            margin: 0;
+            font-size: 0.86rem !important;
+            line-height: 1.55;
+        }
+
+        .maze-hrm-text p + p {
+            margin-top: 0.62rem;
+        }
+
+        .maze-hrm-text .MathJax,
+        .maze-hrm-text .MathJax_Display {
+            font-size: 88% !important;
         }
 
         .analysis-panel {
@@ -758,7 +875,9 @@
             }
 
             .analysis-gif-grid,
-            .analysis-notes {
+            .analysis-notes,
+            .maze-hrm-comparison,
+            .peak-dynamics-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -999,7 +1118,7 @@
             </ul>
 
             <div class="hero-buttons">
-                <a href="" target="_blank" class="hero-button">
+                <a href="https://arxiv.org/pdf/2605.20922" target="_blank" class="hero-button">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                         <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path>
@@ -1314,11 +1433,11 @@
                             <tr class="row-group"><td colspan="5">\(S(\theta_i)\)&amp;\(I(\theta_i)\) as MLPs</td></tr>
                             <tr class="ours"><td>WONN (Ch = 128 → 128)</td><td>94.55 ± 0.09</td><td>3.08M</td><td>73.77 ± 0.40</td><td>3.09M</td></tr>
                             <tr class="ours"><td>WONN (Ch = 64 → 256)</td><td>95.12 ± 0.04</td><td>7.54M</td><td>75.12 ± 0.49</td><td>7.56M</td></tr>
-                            <tr class="ours best"><td>WONN (Ch = 256 → 256)</td><td>95.24 ± 0.12</td><td>12.02M</td><td>76.20 ± 0.45</td><td>12.04M</td></tr>
+                            <tr class="ours best highlight"><td>WONN (Ch = 256 → 256)</td><td><strong>95.24 ± 0.12</strong></td><td>12.02M</td><td><strong>76.20 ± 0.45</strong></td><td>12.04M</td></tr>
                             <tr class="row-group"><td colspan="5">\(S(\theta_i)\)&amp;\(I(\theta_i)\) as trigonometric functions</td></tr>
                             <tr class="ours"><td>WONN (Ch = 128 → 128)</td><td>94.50 ± 0.15</td><td>2.98M</td><td>74.48 ± 0.16</td><td>3.00M</td></tr>
                             <tr class="ours"><td>WONN (Ch = 64 → 256)</td><td>95.08 ± 0.07</td><td>7.40M</td><td>75.81 ± 0.33</td><td>7.43M</td></tr>
-                            <tr class="ours best"><td>WONN (Ch = 256 → 256)</td><td>95.26 ± 0.05</td><td>11.84M</td><td>76.17 ± 0.52</td><td>11.86M</td></tr>
+                            <tr class="ours best highlight"><td>WONN (Ch = 256 → 256)</td><td><strong>95.26 ± 0.05</strong></td><td>11.84M</td><td><strong>76.17 ± 0.52</strong></td><td>11.86M</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1350,10 +1469,10 @@
                             <tr class="row-group"><td colspan="5">\(S(\theta_i)\)&amp;\(I(\theta_i)\) as MLPs</td></tr>
                             <tr class="ours"><td>WONN (Ch = 128 → 128)</td><td>81.50</td><td>3.09M</td><td>–</td><td>–</td></tr>
                             <tr class="ours"><td>WONN (Ch = 64 → 256)</td><td>82.04</td><td>7.56M</td><td>74.84</td><td>7.79M</td></tr>
-                            <tr class="ours best"><td>WONN (Ch = 256 → 256)</td><td>82.88</td><td>12.05M</td><td>76.78</td><td>12.28M</td></tr>
+                            <tr class="ours best highlight"><td>WONN (Ch = 256 → 256)</td><td><strong>82.88</strong></td><td>12.05M</td><td><strong>76.78</strong></td><td>12.28M</td></tr>
                             <tr class="row-group"><td colspan="5">\(S(\theta_i)\)&amp;\(I(\theta_i)\) as trigonometric functions</td></tr>
                             <tr class="ours"><td>WONN (Ch = 128 → 128)</td><td>81.76</td><td>3.00M</td><td>–</td><td>–</td></tr>
-                            <tr class="ours best"><td>WONN (Ch = 64 → 256)</td><td>82.56</td><td>7.43M</td><td>–</td><td>–</td></tr>
+                            <tr class="ours best"><td>WONN (Ch = 64 → 256)</td><td><strong>82.56</strong></td><td>7.43M</td><td>–</td><td>–</td></tr>
                             <tr class="ours"><td>WONN (Ch = 256 → 256)</td><td>82.22</td><td>11.87M</td><td>–</td><td>–</td></tr>
                         </tbody>
                     </table>
@@ -1414,8 +1533,8 @@
                             <tr><td>TRM-MLP (dihedral augmented)</td><td>0.0</td><td>19M</td></tr>
                             <tr class="row-group"><td colspan="3">Other synchrony-based model</td></tr>
                             <tr><td>AKOrN<sup><em>attn</em></sup></td><td>36.2</td><td>1M</td></tr>
-                            <tr class="ours"><td>WONN</td><td>76.2</td><td>0.396M</td></tr>
-                            <tr class="ours best"><td>WONN (Energy Voting)</td><td>80.1</td><td>0.396M</td></tr>
+                            <tr class="ours highlight"><td>WONN</td><td><strong>76.2</strong></td><td>0.396M</td></tr>
+                            <tr class="ours best highlight"><td>WONN (Energy Voting)</td><td><strong>80.1</strong></td><td>0.396M</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1444,7 +1563,7 @@
                             <tr><td>HRM</td><td>99.7 ± 0.2</td><td>27.28M</td></tr>
                             <tr><td>AKOrN<sup><em>attn</em></sup> (T = 16)</td><td>99.8 ± 0.1</td><td>2.98M</td></tr>
                             <tr class="row-group"><td colspan="3">\(S(\theta_i)\)&amp;\(I(\theta_i)\) as trigonometric functions</td></tr>
-                            <tr class="ours best"><td>WONN (T = 16)</td><td>100.0 ± 0.0</td><td>1.58M</td></tr>
+                            <tr class="ours best highlight"><td>WONN (T = 16)</td><td><strong>100.0 ± 0.0</strong></td><td>1.58M</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1486,11 +1605,32 @@
             </figure>
         </div>
 
-        <p class="result-summary">
+        <p class="result-summary maze-path-caption">
             WONN initially activates multiple diffuse path fragments. As the oscillatory
             dynamics evolve, compatible fragments synchronize into a coherent path while
             inconsistent candidates are suppressed.
         </p>
+
+        <div class="maze-hrm-comparison">
+            <figure class="maze-hrm-figure">
+                <img src="static/images/maze_hrm_1_prob.gif" alt="HRM Maze-hard path probability evolution">
+                <figcaption class="body-caption">HRM path probability evolution on Example 1</figcaption>
+            </figure>
+
+            <div class="maze-hrm-text">
+                <h3 class="maze-hrm-title">Comparison with HRM on the same Maze-hard instance</h3>
+
+                <p>
+                    For the first WONN example above, we visualize the first 12 H-block updates of
+                    HRM as evolution steps. HRM remains largely inactive during the early stages,
+                    begins to generate irregular predictions around \(T=4\), and subsequently
+                    undergoes an abrupt transition around \(T=6\) that recovers most of the correct
+                    path. The remaining steps only introduce minor refinements. This abrupt,
+                    insight-like behavior contrasts sharply with the progressive path formation
+                    exhibited by WONN.
+                </p>
+            </div>
+        </div>
 
         <div class="slide-menu">
             <ul class="dots" id="analysis-slide-menu">
@@ -1525,6 +1665,30 @@
                             <p class="analysis-note-text">Coarse global regions are separated from fine local details and boundaries.</p>
                         </div>
                     </div>
+
+                    <div class="peak-dynamics-grid">
+                        <figure class="peak-dynamics-item">
+                            <img src="static/images/peak1_weighted_map.gif" alt="Peak 1 weighted map layer dynamics">
+                            <figcaption class="body-caption">First dominant phase peak</figcaption>
+                        </figure>
+
+                        <figure class="peak-dynamics-item">
+                            <img src="static/images/peak2_weighted_map.gif" alt="Peak 2 weighted map layer dynamics">
+                            <figcaption class="body-caption">Second dominant phase peak</figcaption>
+                        </figure>
+                    </div>
+
+                    <p class="result-summary peak-dynamics-caption">
+                        Layer-wise evolution of the weighted maps associated with the two dominant
+                        phase peaks in WONN on image recognition. Left: weighted map corresponding
+                        to the first dominant phase peak. Right: weighted map corresponding to the
+                        second dominant phase peak. Here \(L\) denotes the layer index and \(T\)
+                        denotes the Winfree dynamics step within that layer. Panels are arranged
+                        according to the actual forward trajectory, from \(L1T1\) to \(L6T3\).
+                        Across layers, the phase-weighted responses are progressively refreshed and
+                        reorganized, evolving from weak local activations toward more coherent
+                        global semantic structures through the recurrent synchronization dynamics.
+                    </p>
                 </div>
             </div>
 
@@ -1564,11 +1728,15 @@
     <div class="container blog main content-section" id="bibtex">
         <h1>BibTeX</h1>
         <p class="body-text">If you find our work useful, please consider citing our paper:</p>
-<pre><code class="plaintext">@article{daiwinfree2026,
+<pre><code class="plaintext">@article{dai2026winfree,
   title={Winfree Oscillatory Neural Network},
   author={Jiawen Dai and Yue Song},
+  journal={arXiv preprint arXiv:2605.20922},
   year={2026},
-  url={}
+  eprint={2605.20922},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG},
+  url={https://arxiv.org/abs/2605.20922}
 }</code></pre>
     </div>
 
