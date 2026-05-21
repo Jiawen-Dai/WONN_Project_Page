@@ -32,46 +32,7 @@ The page provides a compact overview of the paper, including:
 └── README.md
 ```
 
-The page is static and can be hosted directly with GitHub Pages.
 
-## Local Preview
-
-Open `index.html` directly in a browser, or serve the directory locally:
-
-```bash
-python3 -m http.server 8000
-```
-
-Then visit:
-
-```text
-http://localhost:8000
-```
-
-## Updating the Page
-
-Most content edits should be made in `index.html`.
-
-Common updates include:
-
-- updating the paper link in the `Paper` button;
-- updating the code link in the `Code` button;
-- replacing or adding figures under `static/images/`;
-- updating experimental tables;
-- updating the BibTeX entry in the `#bibtex` section.
-
-The current page uses MathJax for equations and local static images for the main visual assets.
-
-## Deployment Notes
-
-For GitHub Pages, keep `.nojekyll` in the root directory so that static files and folders are served without Jekyll processing.
-
-Before committing, remove local macOS metadata files if they appear:
-
-```bash
-find . -name ".DS_Store" -delete
-rm -rf __MACOSX
-```
 
 ## Acknowledgements
 
